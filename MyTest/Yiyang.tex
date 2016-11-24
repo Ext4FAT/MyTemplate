@@ -1,0 +1,453 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 11/18/2016
+% re-edited by Yiyang ZHOU
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 01/08/2011
+% re-edited by Zhiqiang Lin
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 26/05/2010
+% edited by Bill Lampos
+%
+% Feel free to use (copy) the structure (latex formatting source code)
+% but not the content of this document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[xcolor=table,compress,blue]{beamer}
+\mode<presentation>
+
+\usetheme{Boadilla}
+%\usetheme{Warsaw}
+%\usetheme{CambridgeUS}
+%\usetheme{JuanLesPins} % A good theme which eliminates the bottom lines
+%\usetheme{Singapore}%Good for release to print
+
+% other themes: AnnArbor, Antibes, Bergen, Berkeley, Berlin, Boadilla, boxes, CambridgeUS, Copenhagen, Darmstadt, default, Dresden, Frankfurt, Goettingen,
+% Hannover, Ilmenau, JuanLesPins, Luebeck, Madrid, Maloe, Marburg, Montpellier, PaloAlto, Pittsburg, Rochester, Singapore, Szeged, classic
+
+%\usecolortheme{whale}
+% color themes: albatross, beaver, beetle, crane, default, dolphin, dov, fly, lily, orchid, rose, seagull, seahorse, sidebartab, structure, whale, wolverine
+
+%\usefonttheme{serif}
+%\usefonttheme{professionalfonts}
+% font themes: default, professionalfonts, serif, structurebold, structureitalicserif, structuresmallcapsserif
+
+
+% pdf is displayed in full screen mode automatically
+%\hypersetup{pdfpagemode=FullScreen}
+
+
+% define your own colours:
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+% \usepackage{beamerinnertheme_______}
+% inner themes include circles, default, inmargin, rectangles, rounded
+
+%\usepackage{beamerouterthemesmoothbars}
+% outer themes include default, infolines, miniframes, shadow, sidebar, smoothbars, smoothtree, split, tree
+
+\useoutertheme[subsection=false]{smoothbars}
+
+% to have the same footer on all slides
+
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=}
+%\setbeamertemplate{background}{\includegraphics{Imagine.jpg}}
+%\setbeamertemplate{footline}[text line]{xxx xxx xxx}
+%\setbeamertemplate{footline}[text line]{} % or empty footer
+
+
+% include packages
+\usepackage{float} 
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{amsmath}
+%\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{wallpaper}
+%\usepackage{movie15}
+%\usepackage[all,knot]{xy}
+
+%\xyoption{arc}
+\usepackage{url}
+%\usepackage{multimedia}
+\usepackage{hyperref}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{eso-pic}
+\usepackage{shortcuts}
+
+
+%\usepackage{xcolor=pdftex}
+
+
+% Standard packages
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{animate}
+
+%%%
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+%%%
+
+\usepackage{booktabs}
+%\usepackage{ctable}
+%\usepackage{multirow}
+
+% my custom config
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{\argmax}
+\setcounter{tocdepth}{3}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% store graphics in a box, background
+\newsavebox{\mygraphic}
+\sbox{\mygraphic}{%
+	\includegraphics[keepaspectratio,height=\textheight,width=\textwidth]{MMM2017.png}}
+\AddToShipoutPicture{
+	\put(20,50){\usebox{\mygraphic}}
+	%put(-2.2,6){\makebox(-2.2,-6)[bl]{\usebox{\mygraphic}}}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\AtBeginSection[] {
+  \begin{frame}[plain]
+    \frametitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+  \addtocounter{framenumber}{-1}
+}
+
+\iffalse
+\AtBeginSubsection[] {
+  \begin{frame}[plain]
+   \frametitle{Outline}
+    \tableofcontents[currentsubsection]
+    \addtocounter{framenumber}{-1}
+  \end{frame}
+}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\subtitle{\Large{\textbf{Lecture 1: Course Overview}}}
+
+\input{common}
+\titlegraphic{\quad \quad \includegraphics[height=1.5cm]{nju.jpg}\quad \quad \includegraphics[height=1.6cm]{hohai.png}\includegraphics[height=1.6cm]{riseauto.png}}
+
+
+\begin{document}
+
+\frame{
+    \titlepage
+    \thispagestyle{empty}
+}
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{FRAMEWORK}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}{Proposed framework for robotic grasping}
+	\begin{exampleblock}{Framework}
+		
+	\centering{
+	\includegraphics[height=1.8in]{flow.eps}
+	}
+	
+	\end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PRE-PROCESSING}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Object detector}
+\begin{frame}{Object detector}
+	\begin{exampleblock}{Collect training dataset}
+
+	\end{exampleblock}
+	\begin{exampleblock}{Extract HOG feature}
+
+	\end{exampleblock}
+	\begin{exampleblock}{Train SVM classifier}
+
+	\end{exampleblock}
+\end{frame}
+ 
+\subsection{Grasping regions definition}
+\begin{frame}{Grasping regions definition}
+	\begin{exampleblock}{Build models with 3D scanner}
+		
+	\end{exampleblock}
+	\begin{exampleblock}{Mark grasping regions on 3D meshes}
+		\begin{figure}[htpb]
+			\centering
+			\subfigure[Cup]{
+				\begin{minipage}[b]{0.8in}
+					\includegraphics[width=0.8in, height=.65in]{cup.eps}
+				\end{minipage}
+			}
+			\subfigure[Can]{
+				\begin{minipage}[b]{0.8in}
+					\includegraphics[width=0.8in, height=.65in]{can.eps}
+				\end{minipage}
+			}
+			\subfigure[Teapot]{
+				\begin{minipage}[b]{0.8in}
+					\includegraphics[width=0.8in, height=.65in]{pot.eps}
+				\end{minipage}
+			}
+			\subfigure[Box]{
+				\begin{minipage}[b]{0.8in}
+					\includegraphics[width=0.8in, height=.65in]{box.eps}
+				\end{minipage}
+			}
+			\subfigure[Bottle]{
+				\begin{minipage}[b]{0.8in}
+					\includegraphics[width=0.8in, height=.65in]{bottle.eps}
+				\end{minipage}
+			}
+			\label{fig:Models} %% label for entire figure
+		\end{figure}
+	\end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GRASPING REGION LOCALIZATION}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Segmentation}
+\label{ALG-SEG}
+\begin{frame}{Segmentation}
+	\begin{exampleblock}{Input}
+		\begin{itemize}		
+			\item  Depth data: $Depth$
+			\item  Number of Main Segmentations: ${topk}$
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Output}
+		\begin{itemize}		
+			\item  Main Segmentations: ${MS}$
+		\end{itemize}
+	\end{exampleblock}
+\end{frame}
+\begin{frame}{Segmentation}
+	\begin{exampleblock}{Pre-Process}
+		\begin{itemize}
+			\item $<BCR, DCR>$ $\leftarrow$ Region-Growing($Depth$)
+			\item Sort $DCR$ according to the number of points
+			\item Select $topk$ segmentations as $MS$ from $DCR$
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Process}
+		\textbf{for} {$seg \in  (DCR - MS) \cup BCR$}
+		\\ \quad \textbf{for} {$p \in seg$}
+%		\begin{itemize}
+		\\ \quad \quad $CS \leftarrow \{ms|ms \in MS \wedge p\ in\ ConvexHull(ms)\}$
+		\\ \quad \quad $SEG \leftarrow \mathop{\arg\min}_{ms}(distance(ms), ms\in CS)$	
+		\\ \quad \quad $SEG \leftarrow SEG \cup \{p\}$
+%		\end{itemize}
+	    \\ \quad \textbf{end for}
+		\\ \textbf{end for} 
+		\\ \textbf{return} $MS$
+	\end{exampleblock}
+\end{frame}
+
+\subsection{Classification}
+\begin{frame}{Classification}
+	\begin{exampleblock}{Input}
+		\begin{itemize}		
+			\item Color data: $Color$	
+			\item Main Segmentations: $MS$ 
+			\item Object detector: ${Classifier}_{obj}$
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Output}
+		\begin{itemize}
+			\item Object Regions with label: $Regions$
+		\end{itemize}
+	\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Classification}
+	\begin{exampleblock}{Process}
+		{$Rect \leftarrow \{rect|rect \leftarrow BoundBox(ConvexHull(ms))\}$}
+		\\ {$Candidate \leftarrow \emptyset$}
+		\\ \textbf{for} {$rect \in Rect$}
+		\\ \quad {${Region}_{color} \leftarrow$ Extract-Region$(Color, rect)$}
+		%\\ \quad {${Region}_{64\times64} \leftarrow$ Resize$({Region}_{color})$}
+		\\ \quad {${feature}_{HOG} \leftarrow$ Calculate-HOG$({Region}_{color})$}
+		\\ \quad {$label \leftarrow$ Classify$({Classifier}_{obj}, {feature}_{HOG})$}
+		\\ \quad {$Candidate \leftarrow \{rect,label\} \cup Candidate$}
+		\\ \textbf{end for}
+		\\ {$Regions \leftarrow \{<r,l>|<r,l> \in Candidate \wedge l \neq 0\}$}
+		\\ \textbf{return} $Regions$
+	\end{exampleblock}
+\end{frame}
+
+\subsection{Registration}
+\begin{frame}{Registration}
+	\begin{exampleblock}{Generate Points Cloud Data}
+		
+	\end{exampleblock}
+\end{frame}
+\begin{frame}{Registration}
+	\begin{exampleblock}{Input}
+		\begin{itemize}		
+			\item  Point Cloud Region: $Point Cloud$
+			\item  3D Object Models: $Model_{label}$
+			\item  Min Similarity: $sim$
+			\item  Max Acceptable Distance: $mad$
+			\item  Max Iterations: $mi$ 
+			\item  Acceptable Number: $an$
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Output}
+		\begin{itemize}
+			\item Rotate Matrix: $R$
+			\item Translation Vector: $\vec t$ 
+		\end{itemize}
+	\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Registration}
+	\begin{exampleblock}{Process}
+		$R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$ 
+		\\ \textbf{repeat} 
+		\begin{itemize}
+		\item $mrs \leftarrow $ Random-Select$(Model_{label})$
+		\item $pcrs \leftarrow$ Random-Select$(Point Cloud)$
+		\item $similar$-$pairs \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
+		\item $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar$-$pairs)$
+		\item $inliers \leftarrow \{p| <p,*> \in $ $similar$-$pairs\}$
+		\item $alsoinliers \leftarrow \{p| min (distance(R*p+\vec t,q), q\in pcrs) < mad \wedge p \in mrs-inliers \}$
+		\end{itemize}
+		\textbf{until} \quad $|alsoinliers| > an$ or Reach $mi$
+	\end{exampleblock}
+\end{frame}
+\begin{frame}{Registration}
+	\begin{exampleblock}{Process}
+		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Point Cloud)$
+		\\ $R \leftarrow R_{icp} * R$
+		\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
+		\\ \textbf{return} $R$, $\vec t$
+	\end{exampleblock}
+\end{frame}	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{EXPERIMENT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Dataset}
+\begin{frame}{Dataset}
+	
+\end{frame}
+
+\subsection{Evaluation Criteria}
+\begin{frame}{Evaluation Criteria}
+	\begin{exampleblock}{Jaccard Similarity}
+		\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
+		\begin{enumerate}
+			\item \large{which $P$ is the predicted region, 
+				$G$ is groundtruth, and $|X|$ represents the area of rectangle $X$.}
+		\end{enumerate}
+	\end{exampleblock}
+\end{frame}
+
+
+\subsection{Results}
+\begin{frame}{Results}
+	\begin{exampleblock}{Experiment of Comparison different registration methods}
+		\centering{
+			\includegraphics[height=1.8in]{table.png}
+		}
+	\end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{DEMO}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}{Demo}
+	\begin{exampleblock}{Video}
+	%		\begin{figure}[ht]
+	%		      	\includemovie[
+	%		      	poster,
+	%		      	text={\small(Loading demo.mp4)}
+	%		      	]{16cm}{9cm}{demo.mp4}
+	%		\end{figure}
+	\end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[plain]
+	\thispagestyle{empty}
+	\begin{columns}
+		\begin{column}{\paperwidth}
+			\includegraphics[width=\paperwidth,height=\paperheight]{QA.jpg}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}[plain]
+	\thispagestyle{empty}
+	\begin{columns}
+		\begin{column}{\paperwidth}
+			\includegraphics[width=\paperwidth,height=\paperheight]{3Q.png}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\end{document}
