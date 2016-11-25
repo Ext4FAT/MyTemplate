@@ -138,7 +138,7 @@
 \sbox{\mygraphic}{%
 	\includegraphics[keepaspectratio,height=\textheight,width=\textwidth]{MMM2017.png}}
 \AddToShipoutPicture{
-	\put(20,50){\usebox{\mygraphic}}
+	\put(20,40){\usebox{\mygraphic}}
 	%put(-2.2,6){\makebox(-2.2,-6)[bl]{\usebox{\mygraphic}}}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,7 +188,7 @@
 	\begin{exampleblock}{Framework}
 		
 	\centering{
-	\includegraphics[height=1.8in]{flow.eps}
+	\includegraphics[height=2.5in,width=4.68in]{flow.eps}
 	}
 	
 	\end{exampleblock}
@@ -221,31 +221,26 @@
 	\begin{exampleblock}{Mark grasping regions on 3D meshes}
 		\begin{figure}[htpb]
 			\centering
-			\subfigure[Cup]{
-				\begin{minipage}[b]{0.8in}
-					\includegraphics[width=0.8in, height=.65in]{cup.eps}
-				\end{minipage}
-			}
-			\subfigure[Can]{
-				\begin{minipage}[b]{0.8in}
-					\includegraphics[width=0.8in, height=.65in]{can.eps}
-				\end{minipage}
-			}
-			\subfigure[Teapot]{
-				\begin{minipage}[b]{0.8in}
-					\includegraphics[width=0.8in, height=.65in]{pot.eps}
-				\end{minipage}
-			}
-			\subfigure[Box]{
-				\begin{minipage}[b]{0.8in}
-					\includegraphics[width=0.8in, height=.65in]{box.eps}
-				\end{minipage}
-			}
-			\subfigure[Bottle]{
-				\begin{minipage}[b]{0.8in}
-					\includegraphics[width=0.8in, height=.65in]{bottle.eps}
-				\end{minipage}
-			}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{cup.eps}}
+				\centerline{\small{1: Cup}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{can.eps}}
+				\centerline{\small{2: Can}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{pot.eps}}
+				\centerline{\small{3: Teapot}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{box.eps}}
+				\centerline{\small{4: Box}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{bottle.eps}}
+				\centerline{\small{5: Bottle}}
+			\end{minipage}
 			\label{fig:Models} %% label for entire figure
 		\end{figure}
 	\end{exampleblock}
@@ -260,6 +255,8 @@
 \subsection{Segmentation}
 \label{ALG-SEG}
 \begin{frame}{Segmentation}
+	\begin{exampleblock}{Flow}
+	\end{exampleblock}
 	\begin{exampleblock}{Input}
 		\begin{itemize}		
 			\item  Depth data: $Depth$
@@ -296,6 +293,8 @@
 
 \subsection{Classification}
 \begin{frame}{Classification}
+	\begin{exampleblock}{Flow}
+	\end{exampleblock}
 	\begin{exampleblock}{Input}
 		\begin{itemize}		
 			\item Color data: $Color$	
@@ -374,6 +373,11 @@
 		\\ \textbf{return} $R$, $\vec t$
 	\end{exampleblock}
 \end{frame}	
+\begin{frame}{Registration}
+	\begin{exampleblock}{Result}
+		%[keepaspectratio]{pc.gif}
+	\end{exampleblock}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -383,7 +387,43 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Dataset}
 \begin{frame}{Dataset}
-	
+	\begin{exampleblock}{Five typical desktop things}
+		\begin{figure}[htpb]
+			\centering
+			\subfigure[Cup]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{cup-res.eps}
+				\end{minipage}
+			}
+			\subfigure[Can]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{can-res.eps}
+				\end{minipage}
+			}
+			\subfigure[Teapot]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{teapot-res.eps}
+				\end{minipage}
+			}
+			\subfigure[Box]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{box-res.eps}
+				\end{minipage}
+			}
+			\subfigure[Bottle]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{bottle-res.eps}
+				\end{minipage}
+			}
+			\subfigure[Groundtruth]{
+				\begin{minipage}[b]{1.4in}
+					\includegraphics[width=1.2in]{groundtruth.eps}
+				\end{minipage}
+			}
+		
+			\label{fig:ResultShow} %% label for entire figure
+		\end{figure}
+	\end{exampleblock}
 \end{frame}
 
 \subsection{Evaluation Criteria}
@@ -400,9 +440,9 @@
 
 \subsection{Results}
 \begin{frame}{Results}
-	\begin{exampleblock}{Experiment of Comparison different registration methods}
+	\begin{exampleblock}{Compare with different registration methods}
 		\centering{
-			\includegraphics[height=1.8in]{table.png}
+			\includegraphics[keepaspectratio, height=2.05in]{table.png}
 		}
 	\end{exampleblock}
 \end{frame}
