@@ -137,7 +137,7 @@
 %%% store graphics in a box, background
 \newsavebox{\mygraphic}
 \sbox{\mygraphic}{%
-	\includegraphics[keepaspectratio,height=\textheight,width=\textwidth]{MMM2017.png}}
+	\includegraphics[keepaspectratio,height=\textheight,width=\textwidth]{./Picture/Material/MMM2017.png}}
 \AddToShipoutPicture{
 	\put(20,40){\usebox{\mygraphic}}
 	%put(-2.2,6){\makebox(-2.2,-6)[bl]{\usebox{\mygraphic}}}
@@ -168,7 +168,7 @@
 %\subtitle{\Large{\textbf{Lecture 1: Course Overview}}}
 
 \input{common}
-\titlegraphic{\quad \quad \includegraphics[height=1.5cm]{nju.jpg}\quad \quad \includegraphics[height=1.6cm]{hohai.png}\includegraphics[height=1.6cm]{riseauto.png}}
+\titlegraphic{\quad \quad \includegraphics[height=1.5cm]{./Picture/Logo/nju.jpg}\quad \quad \includegraphics[height=1.6cm]{./Picture/Logo/hohai.png}\includegraphics[height=1.6cm]{./Picture/Logo/riseauto.png}}
 
 
 \begin{document}
@@ -208,7 +208,7 @@
 	\begin{exampleblock}{Proposed framework for robotic grasping}
 		
 	\centering{
-	\includegraphics[height=2.16in,width=4.68in]{./PIC/Example/flow.eps}
+	\includegraphics[height=2.16in,width=4.68in]{./Picture/Example/flow.eps}
 	}
 	
 	\end{exampleblock}
@@ -220,8 +220,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{PRE-PROCESSING}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Object detector}
-\begin{frame}{Object detector}
+\subsection{Object detector training}
+\begin{frame}{Object detector training}
 	\begin{exampleblock}{Collect training dataset}
 
 	\end{exampleblock}
@@ -236,29 +236,31 @@
 \subsection{Grasping regions definition}
 \begin{frame}{Grasping regions definition}
 	\begin{exampleblock}{Build models with 3D scanner}
-		
+		\centering{
+			\includegraphics[width=4.2in, height=1.05in]{./Picture/Example/models.png}	
+		}
 	\end{exampleblock}
 	\begin{exampleblock}{Mark grasping regions on 3D meshes}
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{\includegraphics[width=0.8in, height=.85in]{./PIC/Example/cup.eps}}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{./Picture/Example/cup.eps}}
 				\centerline{\small{1: Cup}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{\includegraphics[width=0.8in, height=.85in]{./PIC/Example/can.eps}}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{./Picture/Example/can.eps}}
 				\centerline{\small{2: Can}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{\includegraphics[width=0.8in, height=.85in]{./PIC/Example/pot.eps}}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{./Picture/Example/pot.eps}}
 				\centerline{\small{3: Teapot}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{\includegraphics[width=0.8in, height=.85in]{./PIC/Example/box.eps}}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{./Picture/Example/box.eps}}
 				\centerline{\small{4: Box}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{\includegraphics[width=0.8in, height=.85in]{./PIC/Example/bottle.eps}}
+				\centerline{\includegraphics[width=0.8in, height=.85in]{./Picture/Example/bottle.eps}}
 				\centerline{\small{5: Bottle}}
 			\end{minipage}
 			\label{fig:Models} %% label for entire figure
@@ -280,21 +282,21 @@
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/depth.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/depth.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{region-growing}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/merge.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/merge.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{merging}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/seg.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/seg.eps} }
 			\end{minipage}
 		\end{figure}
 	\end{exampleblock}
@@ -339,21 +341,21 @@
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/color.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/color.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{bounding-box}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/regions.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/regions.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{filter}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/classification.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/classification.eps} }
 			\end{minipage}
 		\end{figure}
 	\end{exampleblock}
@@ -393,22 +395,22 @@
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/pointcloud.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \quad}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{load model}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/before-match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{register}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.eps} }
 			\end{minipage}
 		\end{figure}
 	\end{exampleblock}
@@ -416,22 +418,22 @@
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/pointcloud.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \quad}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{load model}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/before-match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./arrow.jpg} }
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
 				\centerline{\tiny{register}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./PIC/Example/match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.eps} }
 			\end{minipage}
 		\end{figure}
 	\end{exampleblock}
@@ -484,7 +486,7 @@
 \begin{frame}{Localization}
 	\begin{exampleblock}{Result}
 		\centering{
-			\includegraphics[width=2.7in]{./PIC/Example/reflect.eps}
+			\includegraphics[width=2.7in]{./Picture/Example/reflect.eps}
 		}
 		\begin{itemize}
 		\item \footnotesize{Yellow Region: predicated regions for grasping }
@@ -506,94 +508,94 @@
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(1).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(1).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(2).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(2).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(3).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(3).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(4).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(4).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(5).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(5).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/bottle/bottle(6).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/bottle/bottle(6).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(1).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(1).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(2).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(2).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(3).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(3).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(4).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(4).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(5).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(5).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/box/box(6).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/box/box(6).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(1).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(1).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(2).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(2).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(3).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(3).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(4).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(4).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(5).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(5).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/can/can(6).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/can/can(6).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(1).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(1).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(2).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(2).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(3).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(3).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(4).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(4).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(5).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(5).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/cup/cup(6).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/cup/cup(6).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(1).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(1).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(2).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(2).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(3).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(3).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(4).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(4).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(5).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(5).png} }
 			\end{minipage}
 			\begin{minipage}[b]{0.65in}
-				\centerline{ \includegraphics[width=0.6in, height=.45in]{./PIC/Dataset/teapot/teapot(6).png} }
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./Picture/Dataset/teapot/teapot(6).png} }
 			\end{minipage}
 			
 		\end{figure}
@@ -607,55 +609,52 @@
 		\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
 		%\begin{enumerate}
 		\begin{itemize}
-			\item \large{which $P$ is the predicted region, 
-				$G$ is groundtruth, and $|X|$ represents the area of rectangle $X$.}
+			\item \footnotesize{$P$ is predicted region, 
+				$G$ is groundtruth; $|X|$ represents the area of rectangle $X$.}
 		\end{itemize}
 		%\end{enumerate}
+	\end{exampleblock}
+	\begin{exampleblock}{Compare with different registration methods}
+		\centering{
+			\includegraphics[width=\textwidth, height=1.7in]{./Picture/Example/table.png}
+		}
 	\end{exampleblock}
 \end{frame}
 
 
 \subsection{Results}
 \begin{frame}{Results}
-	\begin{exampleblock}{Compare with different registration methods}
-		\centering{
-			\includegraphics[keepaspectratio, height=2.05in]{table.png}
-		}
-	\end{exampleblock}
-\end{frame}
-
-\begin{frame}{Results}
 	\begin{exampleblock}{Grasping region localization}
 		\begin{figure}[htpb]
 			\centering
 			\subfigure[Cup]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/cup-res.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/cup-res.eps}
 				\end{minipage}
 			}
 			\subfigure[Can]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/can-res.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/can-res.eps}
 				\end{minipage}
 			}
 			\subfigure[Teapot]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/teapot-res.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/teapot-res.eps}
 				\end{minipage}
 			}
 			\subfigure[Box]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/box-res.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/box-res.eps}
 				\end{minipage}
 			}
 			\subfigure[Bottle]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/bottle-res.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/bottle-res.eps}
 				\end{minipage}
 			}
 			\subfigure[Groundtruth]{
 				\begin{minipage}[b]{1.4in}
-					\includegraphics[width=1.2in]{./PIC/Example/groundtruth.eps}
+					\includegraphics[width=1.2in]{./Picture/Example/groundtruth.eps}
 				\end{minipage}
 			}
 			
@@ -674,7 +673,7 @@
 \begin{frame}{Demo}
 	\begin{exampleblock}{Video}
 		%	\begin{figure}[ht]
-		%	      	\includemovie[
+		%	      	\include[
 		%	      	poster,
 		%	      	text={\small(Loading demo.mp4)}
 		%	      	]{4.68in}{2.7in}{demo.mp4}
@@ -692,7 +691,7 @@
 	\thispagestyle{empty}
 	\begin{columns}
 		\begin{column}{\paperwidth}
-			\includegraphics[width=\paperwidth,height=\paperheight]{3Q.png}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/3Q.png}
 		\end{column}
 	\end{columns}
 \end{frame}
@@ -701,7 +700,7 @@
 	\thispagestyle{empty}
 	\begin{columns}
 		\begin{column}{\paperwidth}
-			\includegraphics[width=\paperwidth,height=\paperheight]{QA.jpg}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/QA.jpg}
 		\end{column}
 	\end{columns}
 \end{frame}
