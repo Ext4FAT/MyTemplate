@@ -89,6 +89,7 @@
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{wallpaper}
+
 %\usepackage{epsfig}
 %\usepackage{movie15}
 %\usepackage[all,knot]{xy}
@@ -116,7 +117,7 @@
 
 %%%
 \usepackage{tikz}
-\usetikzlibrary{arrows}
+\usetikzlibrary{arrows, shapes}
 \tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
 %%%
 
@@ -179,6 +180,25 @@
 \begin{frame}{Outline}
   \tableofcontents
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{INTRODUCTION}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}{BACKGROUND}
+	\begin{exampleblock}{BACKGROUND}
+		
+	\end{exampleblock}
+\end{frame}
+\begin{frame}{RELATED WORK}
+	\begin{exampleblock}{BACKGROUND}
+		
+	\end{exampleblock}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{FRAMEWORK}
@@ -248,14 +268,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{GRASPING REGION LOCALIZATION}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Segmentation}
 \label{ALG-SEG}
+\tikzstyle{every picture}+=[remember picture] %a global declaration
 \begin{frame}{Segmentation}
 	\begin{exampleblock}{Flow}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./depth.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{region-growing}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./merge.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{merging}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./seg.eps} }
+			\end{minipage}
+		\end{figure}
 	\end{exampleblock}
 	\begin{exampleblock}{Input}
 		\begin{itemize}		
@@ -294,6 +334,26 @@
 \subsection{Classification}
 \begin{frame}{Classification}
 	\begin{exampleblock}{Flow}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./color.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{bounding-box}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./regions.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{filter}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./classification.eps} }
+			\end{minipage}
+		\end{figure}
 	\end{exampleblock}
 	\begin{exampleblock}{Input}
 		\begin{itemize}		
@@ -328,7 +388,50 @@
 \subsection{Registration}
 \begin{frame}{Registration}
 	\begin{exampleblock}{Generate Points Cloud Data}
-		
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./pointcloud.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \quad}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{load model}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./before-match.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{register}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./match.eps} }
+			\end{minipage}
+		\end{figure}
+	\end{exampleblock}
+	\begin{exampleblock}{Flow}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./pointcloud.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \quad}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{load model}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./before-match.eps} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.45in]{./arrow.jpg} }
+				\centerline{\tiny{register}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./match.eps} }
+			\end{minipage}
+		\end{figure}
 	\end{exampleblock}
 \end{frame}
 \begin{frame}{Registration}
@@ -373,9 +476,12 @@
 		\\ \textbf{return} $R$, $\vec t$
 	\end{exampleblock}
 \end{frame}	
-\begin{frame}{Registration}
+\subsection{Localization}
+\begin{frame}{Localization}
 	\begin{exampleblock}{Result}
-		%[keepaspectratio]{pc.gif}
+		\begin{figure}[htpb]
+			\includegraphics[width=3.6in]{./reflect.eps}
+	\end{figure}
 	\end{exampleblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
