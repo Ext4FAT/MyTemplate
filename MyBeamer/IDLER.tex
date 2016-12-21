@@ -404,49 +404,70 @@
 
 \subsection{Registration}
 \begin{frame}{Registration}
-	\begin{exampleblock}{Generate Points Cloud Data}
-		\begin{figure}[htpb]
-			\centering
-			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
-			\end{minipage}
-			\begin{minipage}[b]{0.8in}
-				\centerline{ \quad}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{Loading model}}
-			\end{minipage}
-			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.eps} }
-			\end{minipage}
-			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{Registering}}
-			\end{minipage}
-			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.eps} }
-			\end{minipage}
-		\end{figure}
-	\end{exampleblock}
 	\begin{exampleblock}{Flow}
 		\begin{figure}[htpb]
 			\centering
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/realsense.jpg} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \quad}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{load model}}
+				\centerline{\tiny{Generate Points Cloud}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{register}}
+				\centerline{\tiny{Loading model}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
-				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.eps} }
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.png} }
+			\end{minipage}
+		\end{figure}
+		\vspace{-25pt}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.6in}
+				\centerline{ \includegraphics[width=.45in, height=.6in]{./Picture/Material/down.jpg} }
+			\end{minipage}
+		\end{figure}
+		\vspace{-50pt} 
+		\hspace{-65pt}
+		\rightline{\tiny{RANSAC}}
+		\vspace{15pt} 
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.65in, height=.65in]{./Picture/Material/matrix.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \quad}
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/left.jpg} }
+				\centerline{\tiny{Transformation matrix}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.png} }
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/left.jpg} }
+				\centerline{\tiny{ICP}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/mid.png} }
 			\end{minipage}
 		\end{figure}
 	\end{exampleblock}
@@ -486,7 +507,7 @@
 	\end{exampleblock}
 \end{frame}
 \begin{frame}{Registration}
-	\begin{exampleblock}{Process}
+	\begin{exampleblock}{Process (\emph{con't} )}
 		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
 		\\ $R \leftarrow R_{icp} * R$
 		\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
