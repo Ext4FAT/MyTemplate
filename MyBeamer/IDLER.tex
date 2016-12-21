@@ -185,16 +185,29 @@
 \section{INTRODUCTION}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{}
-\begin{frame}{BACKGROUND}
-	\begin{exampleblock}{BACKGROUND}
-		
+\begin{frame}{INTRODUCTION}%{BACKGROUND}
+	\begin{exampleblock}{Challenge}
+		Robotic grasping driven by cameras is challenging due to
+		a lot inherent difficulties brought by 2D vision based systems, especially the inaccuracy in determining sizes, distances and orientations for visual objects. 
+	\end{exampleblock}
+	\pause
+	\begin{exampleblock}{RGB-D Data}
+		 Much more attentions have been caught in RGB-D camera
+		 based robotics explorations in the multimedia community today, such as indoor environment 3D modeling, self-localization and navigation. 
+	\end{exampleblock}
+	\pause
+	\begin{exampleblock}{Motivation}
+		Due to the inherent limitations and difficulties, meanwhile with widely application of RGB-D, shall we propose a low-price and easy-to-use framework to solve this task? 
 	\end{exampleblock}
 \end{frame}
+
+\iffalse
 \begin{frame}{RELATED WORK}
 	\begin{exampleblock}{BACKGROUND}
 		
 	\end{exampleblock}
 \end{frame}
+\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -286,14 +299,14 @@
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{region-growing}}
+				\centerline{\tiny{Region growing}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/merge.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{merging}}
+				\centerline{\tiny{Merging}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/seg.eps} }
@@ -345,14 +358,14 @@
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{bounding-box}}
+				\centerline{\tiny{Bounding box}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/regions.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{filter}}
+				\centerline{\tiny{Filtering}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/classification.eps} }
@@ -400,14 +413,14 @@
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \quad}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{load model}}
+				\centerline{\tiny{Loading model}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.eps} }
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
-				\centerline{\tiny{register}}
+				\centerline{\tiny{Registering}}
 			\end{minipage}
 			\begin{minipage}[b]{0.8in}
 				\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.eps} }
@@ -441,7 +454,7 @@
 \begin{frame}{Registration}
 	\begin{exampleblock}{Input}
 		\begin{itemize}		
-			\item  Point Cloud Region: $Point Cloud$
+			\item  Points Cloud Region: $Points Cloud$
 			\item  3D Object Models: $Model_{label}$
 			\item  Min Similarity: $sim$
 			\item  Max Acceptable Distance: $mad$
@@ -463,7 +476,7 @@
 		\\ \textbf{repeat} 
 		\begin{itemize}
 		\item $mrs \leftarrow $ Random-Select$(Model_{label})$
-		\item $pcrs \leftarrow$ Random-Select$(Point Cloud)$
+		\item $pcrs \leftarrow$ Random-Select$(Points Cloud)$
 		\item $similar$-$pairs \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
 		\item $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar$-$pairs)$
 		\item $inliers \leftarrow \{p| <p,*> \in $ $similar$-$pairs\}$
@@ -474,7 +487,7 @@
 \end{frame}
 \begin{frame}{Registration}
 	\begin{exampleblock}{Process}
-		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Point Cloud)$
+		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
 		\\ $R \leftarrow R_{icp} * R$
 		\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
 		\\ \textbf{return} $R$, $\vec t$
