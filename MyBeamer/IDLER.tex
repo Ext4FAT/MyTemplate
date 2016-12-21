@@ -238,6 +238,9 @@
 	\begin{exampleblock}{Collect training dataset}
 
 	\end{exampleblock}
+	\begin{exampleblock}{Scale to the same size}
+		
+	\end{exampleblock}
 	\begin{exampleblock}{Extract HOG feature}
 
 	\end{exampleblock}
@@ -326,14 +329,19 @@
 	\end{exampleblock}
 \end{frame}
 \begin{frame}{Segmentation}
-	\begin{exampleblock}{Pre-Process}
+	\begin{exampleblock}{Process}
+	\end{exampleblock}
+	\vspace{-15pt}
+	\begin{exampleblock}{\small{Rough Segment}}
 		\begin{itemize}
 			\item $<BCR, DCR>$ $\leftarrow$ Region-Growing($Depth$)
 			\item Sort $DCR$ according to the number of points
 			\item Select $topk$ segmentations as $MS$ from $DCR$
 		\end{itemize}
 	\end{exampleblock}
-	\begin{exampleblock}{Process}
+	\pause
+	\vspace{-15pt}
+	\begin{exampleblock}{\small{Merge}}
 		\textbf{for} {$seg \in  (DCR - MS) \cup BCR$}
 		\\ \quad \textbf{for} {$p \in seg$}
 %		\begin{itemize}
@@ -341,10 +349,11 @@
 		\\ \quad \quad $SEG \leftarrow \mathop{\arg\min}_{ms}(distance(ms), ms\in CS)$	
 		\\ \quad \quad $SEG \leftarrow SEG \cup \{p\}$
 %		\end{itemize}
-	    \\ \quad \textbf{end for}
+  \\ \quad \textbf{end for}
 		\\ \textbf{end for} 
 		\\ \textbf{return} $MS$
 	\end{exampleblock}
+
 \end{frame}
 
 
@@ -493,6 +502,9 @@
 
 \begin{frame}{Registration}
 	\begin{exampleblock}{Process}
+	\end{exampleblock}
+	\vspace{-15pt}
+	\begin{exampleblock}{\footnotesize{RANSAC}}
 		$R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$ 
 		\\ \textbf{repeat} 
 		\begin{itemize}
@@ -508,6 +520,9 @@
 \end{frame}
 \begin{frame}{Registration}
 	\begin{exampleblock}{Process (\emph{con't} )}
+	\end{exampleblock}
+	\vspace{-15pt}
+	\begin{exampleblock}{\footnotesize{ICP}}
 		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
 		\\ $R \leftarrow R_{icp} * R$
 		\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
