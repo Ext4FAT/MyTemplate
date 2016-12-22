@@ -533,7 +533,7 @@
 
 \subsection{Localization}
 \begin{frame}{Localization}
-	\begin{exampleblock}{Result}
+	\begin{exampleblock}{Grasping region localization}
 		\centering{
 			\includegraphics[width=2.7in]{./Picture/Example/reflect.eps}
 		}
@@ -651,29 +651,8 @@
 	\end{exampleblock}
 \end{frame}
 
-
-\subsection{Evaluation Criteria}
-\begin{frame}{Evaluation Criteria}
-	\begin{exampleblock}{Jaccard Similarity}
-		\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
-		%\begin{enumerate}
-		\begin{itemize}
-			\item \footnotesize{$P$ is predicted region, 
-				$G$ is groundtruth; $|X|$ represents the area of rectangle $X$.}
-		\end{itemize}
-		%\end{enumerate}
-	\end{exampleblock}
-	\begin{exampleblock}{Compare with different registration methods}
-		\centering{
-			\includegraphics[width=\textwidth, height=1.7in]{./Picture/Example/table.png}
-		}
-	\end{exampleblock}
-\end{frame}
-
-
-\subsection{Result}
-\begin{frame}{Result}
-	\begin{exampleblock}{Grasping region localization}
+\begin{frame}{Dataset}
+	\begin{exampleblock}{Examples and groundtruth}
 		\begin{figure}[htpb]
 			\centering
 			\subfigure[Cup]{
@@ -711,6 +690,25 @@
 		\end{figure}
 	\end{exampleblock}
 \end{frame}
+
+
+\subsection{Evaluation Criteria}
+\begin{frame}{Evaluation Criteria}
+	\begin{exampleblock}{Jaccard Similarity}
+		\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
+		%\begin{enumerate}
+		\begin{itemize}
+			\item \footnotesize{$P$ is predicted region, 
+				$G$ is groundtruth; $|X|$ represents the area of rectangle $X$.}
+		\end{itemize}
+		%\end{enumerate}
+	\end{exampleblock}
+	\begin{exampleblock}{Compare with different registration methods}
+		\centering{
+			\includegraphics[width=\textwidth, height=1.7in]{./Picture/Example/table.png}
+		}
+	\end{exampleblock}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -740,7 +738,7 @@
 	\thispagestyle{empty}
 	\begin{columns}
 		\begin{column}{\paperwidth}
-			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/3Q.png}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/QA.jpg}
 		\end{column}
 	\end{columns}
 \end{frame}
@@ -749,7 +747,7 @@
 	\thispagestyle{empty}
 	\begin{columns}
 		\begin{column}{\paperwidth}
-			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/QA.jpg}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/3Q.png}
 		\end{column}
 	\end{columns}
 \end{frame}
