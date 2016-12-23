@@ -235,16 +235,52 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Object detector training}
 \begin{frame}{Object detector training}
-	\begin{exampleblock}{Collect training dataset}
-
+	\vspace{-28pt}
+	\begin{exampleblock}{Collect 2D object image as training examples}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/11.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/22.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/33.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/44.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/55.png}}
+			\end{minipage}
+			\label{fig:Models} %% label for entire figure
+		\end{figure}
 	\end{exampleblock}
-	\begin{exampleblock}{Scale to the same size}
-		
+	\vspace{-16pt}
+	\begin{exampleblock}{Scale to the same size and extract HOG feature}
+		\begin{figure}[htpb]
+			\centering
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/1.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/2.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/3.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/4.png}}
+			\end{minipage}
+			\begin{minipage}[b]{0.8in}
+				\centerline{\includegraphics[width=0.8in, height=.8in]{./Picture/HOG/5.png}}
+			\end{minipage}
+			\label{fig:Models} %% label for entire figure
+		\end{figure}
 	\end{exampleblock}
-	\begin{exampleblock}{Extract HOG feature}
-
-	\end{exampleblock}
-	\begin{exampleblock}{Train SVM classifier}
+	\vspace{-16pt}
+	\begin{exampleblock}{Train SVM classifier with One Vs Rest strategy} 
 
 	\end{exampleblock}
 \end{frame}
@@ -339,7 +375,6 @@
 			\item Select $topk$ segmentations as $MS$ from $DCR$
 		\end{itemize}
 	\end{exampleblock}
-	\pause
 	\vspace{-15pt}
 	\begin{exampleblock}{\small{Merge}}
 		\textbf{for} {$seg \in  (DCR - MS) \cup BCR$}
@@ -720,10 +755,10 @@
 \begin{frame}{Demo}
 	\begin{exampleblock}{Video}
 		%	\begin{figure}[ht]
-		%	      	\include[
+		%	      	\includemovie[
 		%	      	poster,
 		%	      	text={\small(Loading demo.mp4)}
-		%	      	]{4.68in}{2.7in}{demo.mp4}
+		%	      	]{4.68in}{2.7in}{./Video/demo.mp4}
 		%	\end{figure}
 	\end{exampleblock}
 \end{frame}
