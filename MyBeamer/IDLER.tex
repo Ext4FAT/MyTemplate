@@ -221,7 +221,7 @@
 	\begin{exampleblock}{Proposed framework for robotic grasping}
 		
 	\centering{
-	\includegraphics[height=2.16in,width=4.68in]{./Picture/Example/flow.eps}
+	\includegraphics[width=4.68in ]{./Picture/Example/flow.eps}
 	}
 	
 	\end{exampleblock}
@@ -367,8 +367,8 @@
 \begin{frame}{Segmentation}
 	\begin{exampleblock}{Process}
 	\end{exampleblock}
-	\vspace{-15pt}
-	\begin{exampleblock}{\small{Rough Segment}}
+	\vspace{-20pt}
+	\begin{exampleblock}{\small{Step 1: Rough Segment}}
 		\begin{itemize}
 			\item $<BCR, DCR>$ $\leftarrow$ Region-Growing($Depth$)
 			\item Sort $DCR$ according to the number of points
@@ -376,7 +376,7 @@
 		\end{itemize}
 	\end{exampleblock}
 	\vspace{-15pt}
-	\begin{exampleblock}{\small{Merge}}
+	\begin{exampleblock}{\small{Setp 2: Merge}}
 		\textbf{for} {$seg \in  (DCR - MS) \cup BCR$}
 		\\ \quad \textbf{for} {$p \in seg$}
 %		\begin{itemize}
@@ -430,9 +430,19 @@
 	\end{exampleblock}
 \end{frame}
 \begin{frame}{Classification}
+	\vspace{-7pt}
 	\begin{exampleblock}{Process}
-		{$Rect \leftarrow \{rect|rect \leftarrow BoundBox(ConvexHull(ms))\}$}
-		\\ {$Candidate \leftarrow \emptyset$}
+	\end{exampleblock}
+	\vspace{-17pt}
+	\begin{exampleblock}{\small Step 1: Bound boxes}
+		$Rect \leftarrow \emptyset$
+		\\ \textbf{for} {$ms \in MS$}
+		\\ \quad {$Rect \leftarrow Rect \cup BoundBox(ConvexHull(ms))$}
+		\\ \textbf{end for}
+	\end{exampleblock}
+	\vspace{-11pt}
+	\begin{exampleblock}{\small Step 2: Predict for each region}
+		 {$Candidate \leftarrow \emptyset$}
 		\\ \textbf{for} {$rect \in Rect$}
 		\\ \quad {${Region}_{color} \leftarrow$ Extract-Region$(Color, rect)$}
 		%\\ \quad {${Region}_{64\times64} \leftarrow$ Resize$({Region}_{color})$}
@@ -538,8 +548,8 @@
 \begin{frame}{Registration}
 	\begin{exampleblock}{Process}
 	\end{exampleblock}
-	\vspace{-15pt}
-	\begin{exampleblock}{\footnotesize{RANSAC}}
+	\vspace{-20pt}
+	\begin{exampleblock}{\small{Step 1: RANSAC}}
 		$R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$ 
 		\\ \textbf{repeat} 
 		\begin{itemize}
@@ -556,8 +566,8 @@
 \begin{frame}{Registration}
 	\begin{exampleblock}{Process (\emph{con't} )}
 	\end{exampleblock}
-	\vspace{-15pt}
-	\begin{exampleblock}{\footnotesize{ICP}}
+	\vspace{-20pt}
+	\begin{exampleblock}{\small{Step 2: ICP}}
 		$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
 		\\ $R \leftarrow R_{icp} * R$
 		\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
