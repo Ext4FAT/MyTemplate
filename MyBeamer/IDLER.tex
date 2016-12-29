@@ -235,7 +235,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Object detector training}
 \begin{frame}{Object detector training}
-	\vspace{-28pt}
+	\vspace{-9pt}
 	\begin{exampleblock}{Collect 2D object image as training examples}
 		\begin{figure}[htpb]
 			\centering
@@ -257,7 +257,7 @@
 			\label{fig:Models} %% label for entire figure
 		\end{figure}
 	\end{exampleblock}
-	\vspace{-16pt}
+	\vspace{-6pt}
 	\begin{exampleblock}{Scale to the same size and extract HOG feature}
 		\begin{figure}[htpb]
 			\centering
@@ -279,9 +279,11 @@
 			\label{fig:Models} %% label for entire figure
 		\end{figure}
 	\end{exampleblock}
-	\vspace{-16pt}
-	\begin{exampleblock}{Train SVM classifier with One Vs Rest strategy} 
-
+	\vspace{-6pt}
+	\begin{exampleblock}{Train SVM classifier with One Vs Rest strategy}
+		\begin{itemize}
+			\item Saved as \fbox{\textbf{${Classifier}_{obj}$}}
+		\end{itemize} 
 	\end{exampleblock}
 \end{frame}
  
@@ -370,7 +372,7 @@
 	\vspace{-20pt}
 	\begin{exampleblock}{\small{Step 1: Rough Segment}}
 		\begin{itemize}
-			\item $<BCR, DCR>$ $\leftarrow$ Region-Growing($Depth$)
+			\item 	$\left \langle BCR, DCR \right \rangle \leftarrow$ Region-Growing($Depth$)
 			\item Sort $DCR$ according to the number of points
 			\item Select $topk$ segmentations as $MS$ from $DCR$
 		\end{itemize}
@@ -739,6 +741,7 @@
 
 \subsection{Evaluation Criteria}
 \begin{frame}{Evaluation Criteria}
+	\vspace{-8pt}
 	\begin{exampleblock}{Jaccard Similarity}
 		\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
 		%\begin{enumerate}
@@ -748,9 +751,10 @@
 		\end{itemize}
 		%\end{enumerate}
 	\end{exampleblock}
+	\vspace{-6pt}
 	\begin{exampleblock}{Compare with different registration methods}
 		\centering{
-			\includegraphics[width=\textwidth, height=1.7in]{./Picture/Example/table.png}
+			\includegraphics[width=\textwidth, height=1.9in]{./Picture/Example/table.png}
 		}
 	\end{exampleblock}
 \end{frame}
