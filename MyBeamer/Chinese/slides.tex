@@ -40,7 +40,7 @@
 \usepackage{algorithm}
 \usepackage{subfigure}
 \usepackage{multicol}
-\usepackage{amsmath}
+\usepackage{amsmath,bm}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{wallpaper}
@@ -50,7 +50,8 @@
 \usepackage{colortbl}
 \usepackage{fancyhdr}
 \usepackage{eso-pic}
-
+\usepackage{ctable}
+\usepackage{multirow}
 
 \usepackage[english]{babel}
 %\usepackage[latin1]{inputenc}
@@ -88,7 +89,7 @@
 
 \AtBeginSection[] {
 	\begin{frame}[plain]
-		\frametitle{Outline}
+		\frametitle{提纲}
 		\tableofcontents[currentsection]
 	\end{frame}
 	\addtocounter{framenumber}{-1}
@@ -126,7 +127,7 @@
 %	\end{center}
 %\end{frame}
 
-\section{引子}
+\section{课题背景}
 	\begin{frame}{课题引入}\transdissolve
 		\begin{exampleblock}{机器人领域蓬勃发展}
 			
@@ -266,7 +267,14 @@
 			\\ \textbf{return} $Candidate$
 		\end{exampleblock}
 	\end{frame}
-	
+	\subsection{实验结果}
+	\begin{frame}{实验结果}
+		\begin{exampleblock}{分类结果}
+			\centering{
+				\includegraphics[width=\textwidth]{./Picture/Result/classification.png}
+			}
+		\end{exampleblock}
+	\end{frame}
 	
 \section{基于三维的物体点云配准}
   \subsection{点云配准}
@@ -320,12 +328,12 @@
 				\centering
 				\begin{minipage}[b]{0.8in}
 %					\textbf{\huge{
-%					\begin{equation}
-%						\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}
-%					\end{equation}
+%							\begin{equation*}
+%								\begin{bmatrix}R & t\\ 0 & 1 \end{bmatrix}
+%							\end{equation*}
+%						}
 %					}
-%					}
-					%\label{PROBLEM-------cann't show matirx img}
+					\label{PROBLEM-------cann't show matirx img}
 					\centerline{ \includegraphics[width=0.65in, height=.65in]{./Picture/Material/matrix.png} }
 				\end{minipage}
 				\begin{minipage}[b]{0.8in}
@@ -365,57 +373,159 @@
 		\end{exampleblock}
 	\end{frame}
 	
-	\begin{frame}{Registration}
+	\begin{frame}{点云配准}
 		\vspace{-9pt}
 		\begin{exampleblock}{过程}
 		\end{exampleblock}
-		\vspace{-18pt}
+		\vspace{-20pt}
 		\begin{exampleblock}{\small{PART 1: RANSAC}}
 			$R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$ 
 			\\ \textbf{repeat} 
 			\begin{itemize}
 				\item $mrs \leftarrow $ Random-Select$(Model_{label})$
 				\item $pcrs \leftarrow$ Random-Select$(Points Cloud)$
-				\item $similar$-$pairs \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
-				\item $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar$-$pairs)$
-				\item $inliers \leftarrow \{p| <p,*> \in $ $similar$-$pairs\}$
-				\item $alsoinliers \leftarrow \{p| min (distance(R*p+\vec t,q), q\in pcrs) < mad \wedge p \in mrs-inliers \}$
+				\item $similar \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
+				\item $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar)$
+				\item $consensus \leftarrow \{p| min (distance(R*p+\vec t,q), q\in Point Cloud) < mad \wedge p \in Model_{label} \}$
 			\end{itemize}
-			\textbf{until} \quad $|alsoinliers| > an$ or Reach $mi$
+			\textbf{until} \quad $\frac{|consensus|}{|Point Cloud|} > ar$ or Reach $mi$
 		\end{exampleblock}
 	\end{frame}
-	\begin{frame}{Registration}
+	
+	\begin{frame}{点云配准}
 		\begin{exampleblock}{过程 (\emph{续} )}
 		\end{exampleblock}
 		\vspace{-20pt}
 		\begin{exampleblock}{\small{PART 2: ICP}}
-			$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
+			${Model'}_{label} = R * Model_{label} + \vec t$
+			\\ $R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP({Model'}_{label}, Points Cloud)$
 			\\ $R \leftarrow R_{icp} * R$
 			\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
 			\\ \textbf{return} $R$, $\vec t$
 		\end{exampleblock}
 	\end{frame}	
-
+	\subsection{实验结果}
+	\begin{frame}{配准效果}
+		\begin{exampleblock}{地面实况（Groundtruth）与配准效果}
+			\begin{figure}[htpb]
+				\centering
+				\subfigure[地面实况]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/groundtruth.eps}
+					\end{minipage}
+				}
+				\subfigure[瓶子(bottle)]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/bottle-res.eps}
+					\end{minipage}
+				}
+				\subfigure[杯子(cup)]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/cup-res.eps}
+					\end{minipage}
+				}
+				\subfigure[罐子(can)]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/can-res.eps}
+					\end{minipage}
+				}
+				\subfigure[茶壶(teapot)]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/teapot-res.eps}
+					\end{minipage}
+				}
+				\subfigure[盒子(box)]{
+					\begin{minipage}[b]{1.1in}
+						\includegraphics[width=1.1in]{./Picture/Example/box-res.eps}
+					\end{minipage}
+				}
+				\label{FIG ResultShow} 
+			\end{figure}
+		\end{exampleblock}
+	\end{frame}
+	
+	\begin{frame}{实验结果}
+		\vspace{-6pt}
+		\begin{exampleblock}{评价标准}
+			\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
+			
+			\begin{itemize}
+				\item \footnotesize{$P$是预测矩形区域，$G$是地面实况；$|X|$表示矩形$X$的面积}
+			\end{itemize}
+		\end{exampleblock}
+		\vspace{-18pt}
+		\begin{exampleblock}{与基于ICP方法的比较结果}
+			% 配准效果表
+			\begin{table}[htbp]
+				\centering
+				\begin{tabular}{lcccc}
+					\toprule
+					\multicolumn{1}{c}{类别}    & \multicolumn{1}{l}{提出的方法} & \multicolumn{1}{l}{经典ICP} & \multicolumn{1}{l}{带法线ICP} & 非线性ICP			 \\
+					\midrule
+					瓶子(bottle)   & 0.657 & 0.309 & 0.307 & 0.316			 \\
+					%\midrule
+					盒子(box)    & 0.619 & 0.225 & 0.241 & 0.289			 \\
+					%\midrule
+					罐子(can)    & 0.597 & 0.445 & 0.372 & 0.329			 \\
+					%\midrule
+					茶杯(cup)     & 0.695 & 0.042 & 0.132 & 0.177			 \\
+					%\midrule
+					茶壶(teapot)    & 0.658 & 0.165 & 0.237 & 0.215			 \\
+					\bottomrule
+				\end{tabular}%
+				\label{TAB RegistrationCompare}%
+			\end{table}%
+		\end{exampleblock}
+	\end{frame}	
 
 
 \section{物体抓取系统的实现}	
+	\subsection{算法流程}
 	\begin{frame}{算法流程}
 		\centering{
 			\includegraphics[width=\textwidth ]{./Picture/Example/flow.eps}
 		}
 	\end{frame}	
-	\begin{frame}{坐标转换}
-		
+	\subsection{坐标转换}
+	\begin{frame}{相机标定}
+		\vspace{-8pt}
+		\begin{exampleblock}{原理}
+			\begin{equation*} 
+				z_c	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
+				\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix} 
+				\begin{bmatrix} 1 &  &  & 0\\  & 1 &  & 0\\   &  & 1 & 0  \end{bmatrix} 
+				\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix} 
+				\begin{bmatrix} x_{w}\\  y_{w}\\  z_{w}\\  1 \end{bmatrix}
+			\end{equation*}
+			\begin{itemize}
+				\item \footnotesize{其中$u$, $v$为图像坐标系中一点；$f$为相机的焦距；$dx$, $dy$分别为$x$, $y$轴方向的尺度因子；$x_0$, $y_0$分别为图像的中心坐标；$x_w$, $y_w$，$z_w$表示世界坐标系下的三维坐标点。$z_c$表示相机坐标的$Z$轴值}
+			\end{itemize}
+		\end{exampleblock}
+		\vspace{-16pt}
+		\begin{exampleblock}{利用棋盘进行标定}
+			\begin{equation*}  
+				\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} =
+				\begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C}\\  1 \end{bmatrix}
+			\end{equation*}
+		\end{exampleblock}
 	\end{frame}	
-	\begin{frame}{抓取演示}
+	\begin{frame}{机械臂坐标}
 		
+	\end{frame}
+	
+	\subsection{抓取演示}
+	
+	\begin{frame}{抓取演示}
+			\href{./Video/demo-grasping.mp4}{\includegraphics[width=\textwidth,height=0.85\textheight]{./Picture/Material/cover.png}}
 	\end{frame}	
 
 
 \section{总结与展望}	
+\subsection{总结}
 \begin{frame}{总结}
 	
 \end{frame}	
+\subsection{展望}
 \begin{frame}{展望}
 	
 \end{frame}	
