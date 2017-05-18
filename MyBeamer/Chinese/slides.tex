@@ -1,0 +1,384 @@
+%  -*- coding: utf-8 -*-
+% !TEX program = xelatex
+
+\documentclass[xcolor=table,notheorems,compress,blue]{beamer}
+\usetheme{Boadilla}
+%\usetheme[color=blue]{epyt} % black, blue, green, white
+\usepackage[UTF8,noindent]{ctex}
+
+\useoutertheme[subsection=false]{smoothbars}
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=}
+
+
+
+% include packages
+\usepackage{float} 
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{wallpaper}
+\usepackage{url}
+%\usepackage{multimedia}
+\usepackage{hyperref}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{eso-pic}
+%%% store graphics in a box, background
+\newsavebox{\mygraphic}
+\sbox{\mygraphic}{%
+	\includegraphics[keepaspectratio,height=\textheight,width=\textwidth]{./Picture/Material/MMM2017.png}}
+\AddToShipoutPicture{
+	\put(20,40){\usebox{\mygraphic}}
+	%put(-2.2,6){\makebox(-2.2,-6)[bl]{\usebox{\mygraphic}}}
+}
+
+
+%\hypersetup{
+%  pdfpagemode={FullScreen},
+%}
+
+\newtheorem{theorem}{定理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{example}[theorem]{例子}
+
+\newtheorem*{theorem*}{定理}
+\newtheorem*{definition*}{定义}
+\newtheorem*{example*}{例子}
+
+\renewcommand{\proofname}{证明}
+
+\title{\textbf{\Huge{基于深度相机的场景物体定位与抓取研究}}}
+\author{\textbf{\huge{周逸徉}}}
+%\author{\textbf{\huge{导师： 路通 教授}}}
+
+\begin{document}
+
+\begin{frame}[plain]\transboxout
+\titlepage
+\end{frame}
+
+\begin{frame}\transboxin
+\begin{center}
+\tableofcontents[hideallsubsections]
+\end{center}
+\end{frame}
+
+\section{引子}
+	\begin{frame}{课题引入}\transdissolve
+		\begin{exampleblock}{机器人领域蓬勃发展}
+			
+		\end{exampleblock}
+		\begin{exampleblock}{视觉伺服兴起}
+			
+		\end{exampleblock}
+		\begin{exampleblock}{机械臂抓取任务如火如荼}
+			
+		\end{exampleblock}
+%		机器人领域的蓬勃发展\pause
+%		\begin{itemize}[<+->]
+%			\item 结构简洁，只有包含必需元素的底栏，没有顶栏和侧栏。
+%			\item 内容简洁，列表环境和定理环境都使用了简单的形式。
+%			\item 配色简洁，仅仅用到几种背景色和前景色。
+%		\end{itemize}
+	\end{frame}
+
+\section{基于二维的物体候选区域筛选}
+  \subsection{基于深度信息的区域分割}
+	\begin{frame}{区域分割}
+		\begin{exampleblock}{流程展示}
+			\begin{figure}[htpb]
+				\centering
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/depth.eps} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{区域增长}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/merge.eps} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{区域合并}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/seg.eps} }
+				\end{minipage}
+			\end{figure}
+		\end{exampleblock}
+		\begin{exampleblock}{输入}
+			\begin{itemize}		
+				\item  深度信息: $Depth$
+				\item  主分割数目: ${topk}$
+			\end{itemize}
+		\end{exampleblock}
+		\begin{exampleblock}{输出}
+			\begin{itemize}		
+				\item  主分割集: ${MS}$
+			\end{itemize}
+		\end{exampleblock}
+	\end{frame}
+	
+	\begin{frame}{区域分割}
+		\vspace{-10pt}
+		\begin{exampleblock}{过程}
+		\end{exampleblock}
+		\vspace{-18pt}
+		\begin{exampleblock}{\small{PART 1: 粗略分割}}
+			\begin{itemize}
+				\item 在$Depth$上使用区域增长算法找出全黑分割集$BS$和深度分割集$DS$ 
+				\item 将$DS$中的点集按点的数目降序排列
+				\item 从$DS$中选出前$topk$个分割点集作为主分割集$MS$
+			\end{itemize}
+		\end{exampleblock}
+		\vspace{-15pt}
+		\begin{exampleblock}{\small{PART 2: 区域合并}}
+			\textbf{for} {$seg \in  (DCR - MS) \cup BCR$}
+			\\ \quad \textbf{for} {$p \in seg$}
+			%		\begin{itemize}
+			\\ \quad \quad $CS \leftarrow \{ms|ms \in MS \wedge p\ in\ ConvexHull(ms)\}$
+			\\ \quad \quad $SEG \leftarrow \mathop{\arg\min}_{ms}(distance(ms), ms\in CS)$	
+			\\ \quad \quad $SEG \leftarrow SEG \cup \{p\}$
+			%		\end{itemize}
+			\\ \quad \textbf{end for}
+			\\ \textbf{end for} 
+			\\ \textbf{return} $MS$
+		\end{exampleblock}
+	\end{frame}
+	
+  \subsection{基于颜色数据的物体分类}
+	\begin{frame}{物体分类}
+		\begin{exampleblock}{流程展示}
+			\begin{figure}[htpb]
+				\centering
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/color.eps} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{矩形绑定框}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/regions.eps} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{分类器筛选}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/classification.eps} }
+				\end{minipage}
+			\end{figure}
+		\end{exampleblock}
+		\begin{exampleblock}{输入}
+			\begin{itemize}		
+				\item 颜色数据: $Color$	
+				\item 主分割集: $MS$ 
+				\item 物体分类器: ${Classifier}$
+			\end{itemize}
+		\end{exampleblock}
+		\begin{exampleblock}{输出}
+			\begin{itemize}
+				\item 候选区域集: $Candidate$
+			\end{itemize}
+		\end{exampleblock}
+	\end{frame}
+	
+	\begin{frame}{物体分类}
+		\vspace{-7pt}
+		\begin{exampleblock}{过程}
+			$Rect \leftarrow \{r|r=BoundBox(ms), ms\in MS\}$
+			\\
+			{$Candidate \leftarrow \emptyset$}
+			\\ \textbf{for} {$rect \in Rect$}
+			\\ \quad {$region \leftarrow$ Extract-Region$(Color, rect)$}
+			%\\ \quad {${Region}_{64\times64} \leftarrow$ Resize$({Region}_{color})$}
+			\\ \quad {${feature} \leftarrow$ Calculate-HOG$(region)$}
+			\\ \quad {$label \leftarrow$ Classify$({Classifier}, {feature})$}
+			\\ \quad \textbf{if}  {$label \neq 0$}
+			\\ \quad \quad {$Candidate \leftarrow \{<rect,label>\} \cup Candidate$}
+			\\ \quad \textbf{end if}
+			\\ \textbf{end for}
+			\\ \textbf{return} $Candidate$
+		\end{exampleblock}
+	\end{frame}
+	
+	
+\section{基于三维的物体点云配准}
+  \subsection{点云配准}
+	\begin{frame}{点云配准}
+		\begin{exampleblock}{流程展示}
+			\begin{figure}[htpb]
+				\centering
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/realsense.jpg} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \quad}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{点云生成}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/pointcloud.eps} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/arrow.jpg} }
+					\centerline{\tiny{加载模型}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/before-match.png} }
+				\end{minipage}
+			\end{figure}
+			\vspace{-25pt}
+			\begin{figure}[htpb]
+				\centering
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Material/transparent.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.6in}
+					\centerline{ \includegraphics[width=.45in, height=.6in]{./Picture/Material/down.jpg} }
+				\end{minipage}
+			\end{figure}
+			\vspace{-50pt} 
+			\hspace{-65pt}
+			\rightline{\tiny{RANSAC\quad}}
+			\vspace{15pt} 
+			\begin{figure}[htpb]
+				\centering
+				\begin{minipage}[b]{0.8in}
+%					\textbf{\huge{
+%					\begin{equation}
+%						\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}
+%					\end{equation}
+%					}
+%					}
+					%\label{PROBLEM-------cann't show matirx img}
+					\centerline{ \includegraphics[width=0.65in, height=.65in]{./Picture/Material/matrix.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \quad}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/left.jpg} }
+					\centerline{\tiny{变换矩阵}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/match.png} }
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.6in, height=.35in]{./Picture/Material/left.jpg} }
+					\centerline{\tiny{ICP}}
+				\end{minipage}
+				\begin{minipage}[b]{0.8in}
+					\centerline{ \includegraphics[width=0.8in, height=.65in]{./Picture/Example/mid.png} }
+				\end{minipage}
+			\end{figure}
+		\end{exampleblock}
+	\end{frame}
+	\begin{frame}{点云配准}
+		\begin{exampleblock}{Input}
+			\begin{itemize}		
+				\item  区域点云数据: $Points Cloud$
+				\item  3D物体点云数据: $Model_{label}$
+				\item  最小相似度: $sim$
+				\item  最大可接受距离: $mad$
+				\item  最大迭代次数: $mi$ 
+				\item  接受比例: $an$
+			\end{itemize}
+		\end{exampleblock}
+		\begin{exampleblock}{Output}
+			\begin{itemize}
+				\item Rotate Matrix: $R$
+				\item Translation Vector: $\vec t$ 
+			\end{itemize}
+		\end{exampleblock}
+	\end{frame}
+	
+	\begin{frame}{Registration}
+		\vspace{-9pt}
+		\begin{exampleblock}{过程}
+		\end{exampleblock}
+		\vspace{-18pt}
+		\begin{exampleblock}{\small{PART 1: RANSAC}}
+			$R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$ 
+			\\ \textbf{repeat} 
+			\begin{itemize}
+				\item $mrs \leftarrow $ Random-Select$(Model_{label})$
+				\item $pcrs \leftarrow$ Random-Select$(Points Cloud)$
+				\item $similar$-$pairs \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
+				\item $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar$-$pairs)$
+				\item $inliers \leftarrow \{p| <p,*> \in $ $similar$-$pairs\}$
+				\item $alsoinliers \leftarrow \{p| min (distance(R*p+\vec t,q), q\in pcrs) < mad \wedge p \in mrs-inliers \}$
+			\end{itemize}
+			\textbf{until} \quad $|alsoinliers| > an$ or Reach $mi$
+		\end{exampleblock}
+	\end{frame}
+	\begin{frame}{Registration}
+		\begin{exampleblock}{过程 (\emph{续} )}
+		\end{exampleblock}
+		\vspace{-20pt}
+		\begin{exampleblock}{\small{PART 2: ICP}}
+			$R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP(R * Model_{label}, Points Cloud)$
+			\\ $R \leftarrow R_{icp} * R$
+			\\ $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
+			\\ \textbf{return} $R$, $\vec t$
+		\end{exampleblock}
+	\end{frame}	
+
+
+
+\section{物体抓取系统的实现}	
+	\begin{frame}{算法流程}
+		
+	\end{frame}	
+	\begin{frame}{坐标转换}
+		
+	\end{frame}	
+	\begin{frame}{抓取演示}
+		
+	\end{frame}	
+
+
+\section{总结与展望}	
+\begin{frame}{总结}
+	
+\end{frame}	
+\begin{frame}{展望}
+	
+\end{frame}	
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[plain]
+	\thispagestyle{empty}
+	\begin{columns}
+		\begin{column}{\paperwidth}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/3Q.png}
+		\end{column}
+	\end{columns}
+\end{frame}
+\begin{frame}[plain]
+	\thispagestyle{empty}
+	\begin{columns}
+		\begin{column}{\paperwidth}
+			\includegraphics[width=\paperwidth,height=\paperheight]{./Picture/Material/QA.jpg}
+		\end{column}
+	\end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
