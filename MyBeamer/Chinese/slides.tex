@@ -2,6 +2,8 @@
 % !TEX program = xelatex
 
 \documentclass[xcolor=table,compress,blue]{beamer}
+\mode<presentation>
+
 \usetheme{Boadilla}
 % define your own colours:
 \definecolor{Red}{rgb}{1,0,0}
@@ -20,8 +22,8 @@
 \definecolor{darkgreen}{rgb}{0, .6, 0}
 \definecolor{darkred}{rgb}{.75,0,0}
 
-\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
-\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+\definecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\definecolor{purpleish}{cmyk}{0.75,0.75,0,0}
 
 %\usetheme[color=blue]{epyt} % black, blue, green, white
 \usepackage[UTF8,noindent]{ctex}
@@ -48,12 +50,34 @@
 \usepackage{colortbl}
 \usepackage{fancyhdr}
 \usepackage{eso-pic}
+
+
+\usepackage[english]{babel}
+%\usepackage[latin1]{inputenc}
+%\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{animate}
+
+
+\usepackage{tikz}
+\usetikzlibrary{arrows, shapes}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+% my custom config
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{\argmax}
+\setcounter{tocdepth}{3}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+
+
 %%% store graphics in a box, background
 \newsavebox{\mygraphic}
 \sbox{\mygraphic}{%
-	\includegraphics[width=\paperwidth, height=\paperheight]{./Picture/Material/Imagine.png}}
+	\includegraphics[width=\textwidth, height=\textheight]{./Picture/Material/NJU.png}}
 \AddToShipoutPicture{
-	\put(0.,0.){\usebox{\mygraphic}}
+	\put(0.,3.){\usebox{\mygraphic}}
 	%put(-2.2,6){\makebox(-2.2,-6)[bl]{\usebox{\mygraphic}}}
 }
 
@@ -70,13 +94,17 @@
 	\addtocounter{framenumber}{-1}
 }
 
-\titlegraphic{\centering \includegraphics[height=1.5cm]{./Picture/Logo/nju.jpg}}
+%\titlegraphic{\centering \includegraphics[height=1.5cm]{./Picture/Logo/nju.jpg}}
 
 
-
+\newcommand{\spacetwo}{\textcolor{white}{\\sp\\ace}}
+\newcommand{\spaceone}{\textcolor{white}{sp\\ace}}
 \title{\textbf{\Huge{基于深度相机的场景物体定位与抓取研究}}}
+\institute{ 
+	\textbf{\large{南京大学计算机科学与技术系}}
+}
 \author{\textbf{\huge{周逸徉}}}
-%\author{\textbf{\huge{导师： 路通 教授}}}
+\date{\tiny{}}
 
 \begin{document}
 \frame{
