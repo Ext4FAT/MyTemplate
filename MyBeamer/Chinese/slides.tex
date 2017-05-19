@@ -3,6 +3,11 @@
 
 \documentclass[xcolor=table,compress,blue]{beamer}
 \mode<presentation>
+\hypersetup{
+  pdfpagemode={FullScreen},
+}
+
+
 
 \usetheme{Boadilla}
 % define your own colours:
@@ -72,7 +77,6 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 
-
 %%% store graphics in a box, background
 \newsavebox{\mygraphic}
 \sbox{\mygraphic}{%
@@ -88,9 +92,10 @@
 %}
 
 \AtBeginSection[] {
-	\begin{frame}[plain]
+	\begin{frame}[plain]\transboxout
 		\frametitle{提纲}
-		\tableofcontents[currentsection]
+		\vspace{-16pt}
+		\textbf{\Large{\tableofcontents[currentsection,hideallsubsections]}}
 	\end{frame}
 	\addtocounter{framenumber}{-1}
 }
@@ -112,8 +117,9 @@
 	\titlepage
 	\thispagestyle{empty}
 }
-\begin{frame}{Outline}
-	\tableofcontents
+\begin{frame}[plain]{提纲}
+	\vspace{-16pt}
+	\textbf{\Large{\tableofcontents[hideallsubsections]}}
 \end{frame}
 
 
@@ -128,7 +134,7 @@
 %\end{frame}
 
 \section{课题背景}
-	\begin{frame}{课题引入}\transdissolve
+	\begin{frame}{课题引入}
 		\begin{exampleblock}{机器人领域蓬勃发展}
 			
 		\end{exampleblock}
@@ -277,6 +283,25 @@
 	\end{frame}
 	
 \section{基于三维的物体点云配准}
+  \subsection{快速点特征直方图}
+  	\begin{frame}{快速点特征直方图(FPFH)}
+  		\begin{exampleblock}{FPFH特征描述子}
+  			\begin{figure}[htpb]
+	  			\centering
+  			%	\includegraphics[width=0.45\textwidth]{./Picture/FPFH/pfh_diagram.png}
+  				\includegraphics[width=0.45\textwidth]{./Picture/FPFH/pfh_frame.png}
+  				\includegraphics[width=0.35\textwidth]{./Picture/FPFH/fpfh_diagram.png}
+  			\end{figure}
+  		\end{exampleblock}
+  		\begin{exampleblock}{统计FPFH中d维分离直方图}
+  			\begin{figure}[htpb]
+			 	\centering
+			 	\includegraphics[width=0.5\textwidth]{./Picture/FPFH/fpfh_theory.jpg}
+		 	\end{figure}
+  		\end{exampleblock}
+  	
+  	
+	\end{frame}
   \subsection{点云配准}
 	\begin{frame}{点云配准}
 		\begin{exampleblock}{流程展示}
@@ -355,7 +380,7 @@
 		\end{exampleblock}
 	\end{frame}
 	\begin{frame}{点云配准}
-		\begin{exampleblock}{Input}
+		\begin{exampleblock}{输入}
 			\begin{itemize}		
 				\item  区域点云数据: $Points Cloud$
 				\item  3D物体点云数据: $Model_{label}$
@@ -365,7 +390,7 @@
 				\item  接受比例: $an$
 			\end{itemize}
 		\end{exampleblock}
-		\begin{exampleblock}{Output}
+		\begin{exampleblock}{输出}
 			\begin{itemize}
 				\item 旋转矩阵: $R$
 				\item 平移向量: $\vec t$ 
@@ -516,7 +541,7 @@
 	\subsection{抓取演示}
 	
 	\begin{frame}{抓取演示}
-			\href{./Video/demo-grasping.mp4}{\includegraphics[width=\textwidth,height=0.85\textheight]{./Picture/Material/cover.png}}
+			\href{file://./Video/demo-grasping.mp4}{\includegraphics[width=\textwidth,height=0.85\textheight]{./Picture/Material/cover.png}}
 	\end{frame}	
 
 
