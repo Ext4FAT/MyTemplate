@@ -50,7 +50,8 @@
 \usepackage{epstopdf}
 \usepackage{wallpaper}
 \usepackage{url}
-%\usepackage{multimedia}
+\usepackage{multimedia}
+%\usepackage{movie15}
 \usepackage{hyperref}
 \usepackage{colortbl}
 \usepackage{fancyhdr}
@@ -134,6 +135,7 @@
 %\end{frame}
 
 \section{课题背景}
+  \subsection{绪论}
 	\begin{frame}{课题引入}
 		\begin{exampleblock}{机器人领域蓬勃发展}
 			
@@ -152,7 +154,10 @@
 %		\end{itemize}
 	\end{frame}
 
-\section{基于二维的物体候选区域筛选}
+%  \subsection{相关工作}
+%  	\begin
+  
+\section{结合深度和颜色信息的场景物体检测}
   \subsection{基于深度信息的区域分割}
 	\begin{frame}{区域分割}
 		\begin{exampleblock}{流程展示}
@@ -282,7 +287,7 @@
 		\end{exampleblock}
 	\end{frame}
 	
-\section{基于三维的物体点云配准}
+\section{结合RANSAC与ICP的场景物体点云配准}
   \subsection{快速点特征直方图}
   	\begin{frame}{快速点特征直方图(FPFH)}
   		\begin{exampleblock}{FPFH特征描述子}
@@ -302,7 +307,7 @@
   	
   	
 	\end{frame}
-  \subsection{点云配准}
+  \subsection{结合RANSAC+ICP的点云配准}
 	\begin{frame}{点云配准}
 		\begin{exampleblock}{流程展示}
 			\begin{figure}[htpb]
@@ -359,7 +364,7 @@
 %						}
 %					}
 					\label{PROBLEM-------cann't show matirx img}
-					\centerline{ \includegraphics[width=0.65in, height=.65in]{./Picture/Material/matrix.png} }
+					\centerline{ \includegraphics[width=0.65in, height=.65in]{./Picture/Material/matrix.eps} }
 				\end{minipage}
 				\begin{minipage}[b]{0.8in}
 					\centerline{ \quad}
@@ -470,15 +475,14 @@
 	\end{frame}
 	
 	\begin{frame}{实验结果}
-		\vspace{-6pt}
+		\vspace{-8pt}
 		\begin{exampleblock}{评价标准}
-			\centering{\LARGE{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
-			
+			\centering{\large{$J = \frac{|P \bigcap G|}{|P \bigcup G|}$}}
 			\begin{itemize}
 				\item \footnotesize{$P$是预测矩形区域，$G$是地面实况；$|X|$表示矩形$X$的面积}
 			\end{itemize}
 		\end{exampleblock}
-		\vspace{-18pt}
+		\vspace{-8pt}
 		\begin{exampleblock}{与基于ICP方法的比较结果}
 			% 配准效果表
 			\begin{table}[htbp]
@@ -512,9 +516,9 @@
 		}
 	\end{frame}	
 	\subsection{坐标转换}
-	\begin{frame}{相机标定}
+	\begin{frame}{坐标转换}
 		\vspace{-8pt}
-		\begin{exampleblock}{原理}
+		\begin{exampleblock}{相机标定}
 			\begin{equation*} 
 				z_c	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
 				\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix} 
@@ -526,34 +530,92 @@
 				\item \footnotesize{其中$u$, $v$为图像坐标系中一点；$f$为相机的焦距；$dx$, $dy$分别为$x$, $y$轴方向的尺度因子；$x_0$, $y_0$分别为图像的中心坐标；$x_w$, $y_w$，$z_w$表示世界坐标系下的三维坐标点。$z_c$表示相机坐标的$Z$轴值}
 			\end{itemize}
 		\end{exampleblock}
-		\vspace{-16pt}
-		\begin{exampleblock}{利用棋盘进行标定}
-			\begin{equation*}  
-				\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} =
-				\begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C}\\  1 \end{bmatrix}
-			\end{equation*}
+		\vspace{-8pt}
+		\begin{exampleblock}{机械臂标定}
+			\begin{equation}
+				\begin{bmatrix} X_C\\  Y_C\\  Z_C \end{bmatrix} +
+				\begin{bmatrix} X_{0}\\  Y_{0}\\  Z_{0}\end{bmatrix} =
+				\begin{bmatrix} X_{A}\\  Y_{A}\\  Z_{A}\end{bmatrix} 
+			\end{equation}
+%			\begin{equation*}  
+%				\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} =
+%				\begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C}\\  1 \end{bmatrix}
+%			\end{equation*}
 		\end{exampleblock}
 	\end{frame}	
-	\begin{frame}{机械臂坐标}
-		
+
+	\begin{frame}{坐标转换}
+		\begin{columns}[c]
+			\column{0.5\textwidth}
+			\begin{exampleblock}{相机标定}
+				\includegraphics[width=\textwidth]{./Picture/Calibration/corner.png}
+			\end{exampleblock}
+			\column{0.4\textwidth}
+			\begin{exampleblock}{机械臂标定}
+				\includegraphics[width=\textwidth]{./Picture/Calibration/InitPoint.png}
+			\end{exampleblock}
+		\end{columns}
 	\end{frame}
 	
 	\subsection{抓取演示}
 	
-	\begin{frame}{抓取演示}
-			\href{file://./Video/demo-grasping.mp4}{\includegraphics[width=\textwidth,height=0.85\textheight]{./Picture/Material/cover.png}}
+	\begin{frame}{\href{./Video/demo-grasping.mp4}{抓取演示}}
+		\includegraphics[width=\textwidth,height=0.85\textheight]{./Picture/Material/cover.png}
 	\end{frame}	
 
 
 \section{总结与展望}	
 \subsection{总结}
-\begin{frame}{总结}
-	
+\begin{frame}{本文贡献}
+	\begin{exampleblock}{RGB-D快速候选区域筛选}
+		\begin{itemize}
+			\item 基于深度信息的区域增长法对场景区域进行分割
+			\item 基于颜色信息的HOG特征加SVM分类器对区域进行判别
+		\end{itemize}
+	\end{exampleblock}	
+	\begin{exampleblock}{点云配准抓取定位}
+		\begin{itemize}
+			\item 结合RANSAC与ICP将部分点云与整体点云配准以实现抓取定位
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{系统实现}
+		\begin{itemize}
+			\item 利用黑白棋盘进行深度相机与机械臂的标定
+		\end{itemize}
+	\end{exampleblock}
 \end{frame}	
+
 \subsection{展望}
-\begin{frame}{展望}
-	
+\begin{frame}{本文不足}
+	\begin{exampleblock}{预处理过程繁杂}
+		\begin{itemize}
+			\item 三维物体建模
+			\item 二维颜色数据采集
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{可扩展性弱}
+		\begin{itemize}
+			\item 添加新物体时，要做两步预处理
+		\end{itemize}
+	\end{exampleblock} 
+	 \begin{exampleblock}{抓取精度}
+	 	\begin{itemize}
+	 		\item 较为细小的物体
+	 		\item 无点云物体
+	 	\end{itemize}
+	 \end{exampleblock}
+ 
 \end{frame}	
+
+\begin{frame}{展望}
+	\begin{exampleblock}{进一步研究思路}
+		\begin{itemize}
+			\item 相似三维结构聚类
+			\item 几何学上的信息推断
+			\item 利用学习模型进行预测
+		\end{itemize}
+	\end{exampleblock}
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
