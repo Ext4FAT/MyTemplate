@@ -137,25 +137,23 @@
 \section{课题背景}
   \subsection{绪论}
 	\begin{frame}{课题引入}
-		\begin{exampleblock}{机器人领域蓬勃发展}
-			
+		\begin{exampleblock}{机械臂自动抓取客观困难}
+			利用相机进行机械臂自动抓取驱动是一个很难的课题，纯RGB相机在解决此任务时会遇到诸多困难。在确定物体大小、距离远近以及方向时，尤为突出。复
+			杂算法以适应实际场景则时间复杂度陡增。
 		\end{exampleblock}
-		\begin{exampleblock}{视觉伺服兴起}
-			
+		\begin{exampleblock}{深度相机的广泛应用}
+			在机器人研究领域，越来越多的应用开始RGB-D的深度相机，例如室内场景3D建模，SLAM，机器人自动定位与导航等。
 		\end{exampleblock}
-		\begin{exampleblock}{机械臂抓取任务如火如荼}
-			
+		\begin{exampleblock}{有没有廉价的可行方案}
+			由于抓取任务客观存在诸多困难，同时RGB-D的深度相机又广泛的使用，能不能提出一个廉价可用的机械臂抓取方案。
 		\end{exampleblock}
-%		机器人领域的蓬勃发展\pause
-%		\begin{itemize}[<+->]
-%			\item 结构简洁，只有包含必需元素的底栏，没有顶栏和侧栏。
-%			\item 内容简洁，列表环境和定理环境都使用了简单的形式。
-%			\item 配色简洁，仅仅用到几种背景色和前景色。
-%		\end{itemize}
 	\end{frame}
-
-%  \subsection{相关工作}
-%  	\begin
+	\subsection{提出的算法流程}
+		\begin{frame}{提出的算法框架}
+		\centering{
+			\includegraphics[width=\textwidth ]{./Picture/Example/flow.eps}
+		}
+		\end{frame}	
   
 \section{结合深度和颜色信息的场景物体检测}
   \subsection{基于深度信息的区域分割}
@@ -509,54 +507,42 @@
 
 
 \section{物体抓取系统的实现}	
-	\subsection{算法流程}
-	\begin{frame}{算法流程}
-		\centering{
-			\includegraphics[width=\textwidth ]{./Picture/Example/flow.eps}
-		}
-	\end{frame}	
 	\subsection{坐标转换}
 	\begin{frame}{坐标转换}
-		\vspace{-8pt}
-		\begin{exampleblock}{相机标定}
-			\begin{equation*} 
-				z_c	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
-				\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix} 
-				\begin{bmatrix} 1 &  &  & 0\\  & 1 &  & 0\\   &  & 1 & 0  \end{bmatrix} 
-				\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix} 
-				\begin{bmatrix} x_{w}\\  y_{w}\\  z_{w}\\  1 \end{bmatrix}
-			\end{equation*}
-			\begin{itemize}
-				\item \footnotesize{其中$u$, $v$为图像坐标系中一点；$f$为相机的焦距；$dx$, $dy$分别为$x$, $y$轴方向的尺度因子；$x_0$, $y_0$分别为图像的中心坐标；$x_w$, $y_w$，$z_w$表示世界坐标系下的三维坐标点。$z_c$表示相机坐标的$Z$轴值}
-			\end{itemize}
-		\end{exampleblock}
-		\vspace{-8pt}
-		\begin{exampleblock}{机械臂标定}
-			\begin{equation}
-				\begin{bmatrix} X_C\\  Y_C\\  Z_C \end{bmatrix} +
-				\begin{bmatrix} X_{0}\\  Y_{0}\\  Z_{0}\end{bmatrix} =
-				\begin{bmatrix} X_{A}\\  Y_{A}\\  Z_{A}\end{bmatrix} 
-			\end{equation}
-%			\begin{equation*}  
-%				\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} =
-%				\begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C}\\  1 \end{bmatrix}
-%			\end{equation*}
-		\end{exampleblock}
-	\end{frame}	
-
-	\begin{frame}{坐标转换}
-		\begin{columns}[c]
+		\vspace{-24pt}
+		\begin{columns}[t]
 			\column{0.5\textwidth}
 			\begin{exampleblock}{相机标定}
-				\includegraphics[width=\textwidth]{./Picture/Calibration/corner.png}
+				\vspace{-10pt}
+				\begin{equation*}
+					\begin{bmatrix} X_P\\  Y_P\\  Z_P \end{bmatrix} = 
+					z_c	{\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix}}^{-1} \begin{bmatrix} u\\  v\\  1 \end{bmatrix}
+				\end{equation*}	
+				\vspace{-10pt}
+				\begin{equation*}
+					\begin{bmatrix} X_{P}\\  Y_{P}\\  Z_{P} \end{bmatrix} =
+					R \times \begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C} \end{bmatrix} +  \vec{t}
+				\end{equation*}
 			\end{exampleblock}
-			\column{0.4\textwidth}
+			\vspace{-10pt}
 			\begin{exampleblock}{机械臂标定}
+				\begin{equation*}
+				\begin{bmatrix} X_{A}\\  Y_{A}\\  Z_{A}\end{bmatrix} =
+				\begin{bmatrix} X_C\\  Y_C\\  Z_C \end{bmatrix} +
+				\begin{bmatrix} X_{0}\\  Y_{0}\\  Z_{0}\end{bmatrix} 
+				\end{equation*}
+			\end{exampleblock}
+		
+			\column{0.36\textwidth}
+			\begin{exampleblock}{利用棋盘进行标定}
+				\includegraphics[width=\textwidth]{./Picture/Calibration/corner.png}
+				\\
+				
 				\includegraphics[width=\textwidth]{./Picture/Calibration/InitPoint.png}
 			\end{exampleblock}
 		\end{columns}
-	\end{frame}
-	
+	\end{frame}	
+
 	\subsection{抓取演示}
 	
 	\begin{frame}{\href{./Video/demo-grasping.mp4}{抓取演示}}
