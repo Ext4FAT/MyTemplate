@@ -1,0 +1,16 @@
+﻿Picture/
+figures/
+Tables/
+License/
+*.toc
+*.aux
+*.log
+*.bak
+*.blg
+*.bbl
+*.out
+*.pdf
+*.lof
+*.lot
+*.dvi
+

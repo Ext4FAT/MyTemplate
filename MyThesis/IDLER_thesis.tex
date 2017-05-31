@@ -1,0 +1,1492 @@
+%% Thesis Template of Nanjing University
+%%   for using NJUthesis package with LaTeX2e
+%%
+%% Created by Wenbo Yang <http://solrex.org>
+%% Homepage: http://share.solrex.org/njuthesis/
+%%
+%% $Id: template.tex,v 0.2 2010/05/01 Exp $
+
+\expandafter\def\csname CTEX@spaceChar\endcsname{\hspace{1em}}
+
+\documentclass[dvipdfmx, oneside, master]{NJUthesis}
+% 可选参数：l
+%   nobackinfo 取消封二页导师签名信息
+%   oneside/twoside 单面/双面打印
+%   phd/master 博士/硕士论文
+% 下面三个选一个：
+% dvipdfm 使用 dvipdfm(x) 生成最终的 PDF 文档 (缺省设置，不建议修改）
+% dvips 使用 dvips 生成最终的 PS 文档
+% pdftex 使用 pdfLaTeX 生成最终的 PDF 文档
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 导言区
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 小节标题靠左对齐
+\CTEXsetup[format+={\flushleft}]{section}
+
+% 设置链接颜色
+\hypersetup{
+% pdf 属性
+             pdftitle={LaTeX Thesis Template of Nanjing University}, %
+            pdfauthor={Yiyang Zhou}
+}
+
+% 表格
+\usepackage{longtable, multirow}
+% 英文使用 Times 字体
+\usepackage{times}
+% 源代码
+\usepackage{fancyvrb}
+% 自定义列表样式
+\usepackage{enumitem}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+
+\DeclareMathOperator*{\argmax}{\argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{eso-pic}
+\usepackage{ctable}
+\usepackage{multirow}
+
+% 算法包
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\floatname{algorithm}{算法}
+% 引用
+\usepackage{url}
+%\usepackage[numbers,sort&compress]{natbib}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 封面部分
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 国家图书馆封面内容字符串
+% 仅博士需要填写并保证模板参数选择了 phd
+\classification{}
+\confidential{}
+\UDC{}
+\titlelinea{南京大学学位论文}
+\titlelineb{~\LaTeX{}~模板}
+\titlelinec{}
+\advisorinfo{南京大学~计算机科学与技术系}
+\chairman{XXX 教授}
+\reviewera{某某某某　副研究员}
+\reviewerb{XXX 教授}
+\reviewerc{XXX 教授}
+\reviewerd{XXX 教授}
+\nlcfootdate{2010~年~5~月~1~ 日}
+
+% 南大中文封面内容字符串
+\title{基于深度相机的场景物体定位与抓取研究}
+\author{周逸徉}
+\studentnum{~MG1433094}
+\grade{2014}
+\advisor{路通~~教授}
+\major{计算机科学与技术}
+\researchfield{计算机视觉}
+\footdate{2017~年~5~月}
+\submitdate{2017~年~5~月~22~ 日}
+\defenddate{2017~年~5~月~24~日}
+
+% 英文封面内容字符串
+\englishtitle{Research on Robotic Grasping Region Localization through RGB-D camera}
+\englishauthor{Yiyang Zhou}
+\englishadvisor{Professor Tong Lu}
+\englishinstitute{National Key Laboratory for Novel Software Technology\\
+Nanjing University}
+\englishdegree{Master}
+\englishmajor{Computer Science}
+\englishdate{May 2017}
+
+% 制作封面命令
+\maketitle
+
+% 制作英文封面命令
+\makeenglishtitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 前言部分
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frontmatter
+
+% 中文摘要
+\begin{abstract}
+	
+	 近年来，深度摄像头因其功能强大、成本相对较低、部署方便，在室内场景建模、机器人自动定位导航等领域得到广泛使用。但是，在利用深度摄像机的深度视觉数据来驱动机械臂进行物体抓取方面，由于对精度和实时性有较高要求，
+现有方法较难满足要求。本文对这一问题进行了系统研究，论文选题具有较强的理论意义和实用价值。
+	
+本文提出了一种基于3D点云配准、深度摄像头驱动的机械臂自动物体抓取方法。具体来讲，本文结合RGB-D数据的相关特点，对基于视觉驱动的机械臂定位与抓取问题进行了综述，梳理出当前机械臂领域的研究与应用现况。之后，本文给出了一种新的深度数据驱动的机械臂抓取算法框架，并将其分为区域分割、物体分类、点云配准以及机械臂驱动四个算法模块，具体工作包括：
+	\begin{enumerate}
+	    \item 预处理与3D抓取区域的标注：使用3D扫描仪对常见桌面级物体进行建模，并在3D点云模型上标注出物体的可抓取部位；之后采集物体的二维图片，以训练分类器；
+		\item 结合深度与颜色信息的物体筛选：利用深度摄像头采集的深度信息对二维图片进行区域分割，再利用预处理时生成的物体分类器进行分割后的区域进行分类，得到物体的二维候选区域；
+		\item 点云配准：利用深度信息和摄像机的内参生成点云数据，进而利用生成的点云数据和扫描物体的点云数据进行点云配准，获取空间的转移矩阵，最终通过转移矩阵将物体的可抓取部分映射回深度相机的三维空间；
+		\item 视觉驱动的机械臂抓取：利用棋盘标定来估算外参后，将相机空间预测的区域转换到机械臂空间，从而驱动机械臂实施抓取任务。		 
+	\end{enumerate}
+
+	本实验采集了五类常见的桌面级物体（瓶子、茶杯、易拉罐、茶壶和盒子），分别对其建模并利用提出的算法进行了测试，并利用杰卡德相似度作为评判标准。实验结果表明，本文所提出的方法取得了良好的效果。
+	
+	\keywords{RGB-D; 深度摄像机; 点云配准; 物体抓取}
+	
+	
+\end{abstract}
+
+% 英文摘要
+\begin{englishabstract}
+	
+	
+	With the widespread use of depth cameras, RGB-D data based applications have grown rapidly in each passing day such as in indoor scene modeling and automatic navigation. Meanwhile, price of depth camera is also becoming more and more cheap. However, RGB-D data driven robot grasping still cannot well meet human requirements due to accuracy and efficiency problems in vision systems.
+	
+	In this paper, we present a novel framework to drive automatic robotic grasp by matching camera captured RGB-D data with 3D meshes, on which prior knowledge for grasp is pre-defined for each object type. And then propose a novel grasping localization algorithm based on RGB-D data to drive robot. This proposed framework is composed of four parts: region segmentation, object classification, points cloud registration and robotic driver.
+	
+	This algorithm framework can be summarized in the following sections:
+	\begin{enumerate}
+		\item Build 3D model and mark grasping region： scan 3D meshes for typical object shapes and pre-define grasping regions for each 3D shape surface, which will be considered as the prior knowledge for guiding automatic robotic grasp.
+		\item Filter object regions based on RGB-D: segment RGB-D image captured by a depth camera without semantics from background using depth data, and then recognize 2D shape of the object by a SVM classifier. 
+		\item Points cloud registration: propose a new algorithm to register the segmented points cloud data generated by depth camera inherent parameter with predefined 3D meshes to gain transformation matrix, and finally convert points cloud data of grasping region to camera coordinate.   
+		\item Robotic drive grasping: estimate the external matrix with chessboard calibration and reflect camera coordinate to robotic coordinate.
+	\end{enumerate}
+	
+   Our experimental results show that the proposed framework is particularly useful to guide camera based robotic grasp. At the end of the paper, we also give the demonstration of our automatic grasping region localization system.
+	
+   \englishkeywords{RGB-D, Depth camera, Registration, Robotic grasping}
+	
+\end{englishabstract}
+
+% 生成目录命令
+\tableofcontents
+
+% 以下两个目录可根据具体情况注释掉
+% 生成表格目录命令
+\listoftables
+% 生成插图目录命令
+\listoffigures
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 正文部分
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter
+
+
+\chapter{绪论}
+%% Introduction
+%机器人的发展日新月异
+% 其中视觉伺服控制是组件机器人系统的重要手段
+% 视觉伺服的概念blabla……
+
+%深度摄像头社区也蓬勃健壮
+
+%本文利用深度摄像解决视觉伺服控制中的视觉驱动系统
+
+%% Related work
+% 视觉伺服本身的研究进展
+%    机器视觉历史
+%    相机模型
+%    典型视觉伺服方法归类
+%    抓取任务的部分进展
+% 伺服主要在服务型机器人上研究比较热，举出一些机器人的应用实例
+
+\section{研究背景}
+	 机器人在实际生活中的应用正悄然经历着革命性的变化。由于现阶段机器人应用需求的日益复杂，机器人的种类也呈多样化的趋势。粗糙划分的话，我们可以将机器人分为工业型机器人和服务型机器人。工业型机器人在日常的生产制造中已逐步取代人工重复操作，比如焊接、搬运、装配、喷漆、切割等任务，大大节约了人力成本，提高了生产效率。
+工业型机器人通常和我们印象中的机器人不太一样，这类机器人往往是没有类人形的外观，看上去就是一台机器。工业型机器人的本质就是为完成特定任务而专门定制的器械。图\allowbreak \ref{SUB KUKA}展示的就是德国KUKA公司量产的一款灵敏装配作业的轻型机器人。服务型机器人可分为专业服务型和家庭服务型。专业服务型和工业机器人某些特性相似，但属于民用化，没有过细的精度要求，例如扫地机器人、医疗服务机器人以及住宅安全防御机器人；
+家庭型主要以娱乐、交互式机器人为主并能完成一些日常任务。图\allowbreak \ref{SUB Intel Bunnyman}是Intel公司开发的Bunnyman，这是一种交互式问答机器人，主要用于家庭服务娱乐。
+		
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[德国KUKA公司的LBR iiwa]{
+			\label{SUB KUKA}
+			\includegraphics[width=0.55\textwidth, height=0.438\textwidth]{./Picture/Introduction/KUKA.eps}}
+		\subfigure[Intel公司的Bunnyman]{
+			\label{SUB Intel Bunnyman}
+			\includegraphics[width=0.42\textwidth]{./Picture/Introduction/bunnyman.eps}}
+		\caption{工业型机器人与服务型机器人}
+	\end{figure}
+	
+	 现今，工业型机器人的技术已经相当成熟，讲究的是特定场合完成特定任务，所需环境是固定的，但随着工业4.0的到来，工业型机器人也面临着智能化的改革；服务型机器人的定位则是智能化，这就需要在其上开发更多的自主功能以适应各种不同的复杂环境。
+近年来，人工智能的方法在机器人领域的各类应用已如火如荼地展开，机器人的发展迎来了大浪潮时代。
+	
+	%机器人的种类繁多，构造方式也各式各样，但实现机器人系统的一种重要途径就是视觉伺服（Visual Servo）。通过视觉信息作为输入，经过一系列处理后反馈信息以指导机器人行动。
+
+	%如图\allowbreak \ref{FIG Servo}所示，视觉伺服系统通常由视觉系统、控制策略和机器人系统组成, 其中视觉系统通过图像获取和视觉处理得到合适的视觉反馈信息, 再由控制器得到机器人的控制输入. 在应用中, 需要根据任务需求设计视觉伺服系统的实现策略。
+	
+	与此同时，新型的智能感知硬件越来越廉价且性能越来越高，尤其是RGB-D深度摄像机的应用与普及。举例来说，利用RGB-D相机（如微软的Kinect~\allowbreak \cite{DBLP:conf/iccvw/SmisekJP11}和英特尔的Realsense\allowbreak \cite{DBLP:conf/icip/DraelosQBS15}）可以在机器人场景探索物体时，不仅获取颜色信息，还能获取物体到相机的距离。RGB-D相机的这种特性在场景感知系统可以使机器人更加智能与自主地探索周围环境。
+因此，大量研究人员都聚焦在基于RGB-D相机的机器人自主勘探任务，例如室内场景 3D 建模\allowbreak \cite{DBLP:journals/tcyb/HanSXS13}、自我定位\allowbreak \cite{DBLP:journals/ijista/PrusakMRSK08}、导航\allowbreak \cite{DBLP:journals/trob/PeasleyB15}和路径规划\allowbreak \cite{DBLP:conf/humanoids/MaierHB12}等。
+
+	 但是，和机器人自动勘探任务任务相反的是，少有利用RGB-D数据驱动机器人自动抓取定位的相关研究，这可能由于深度相机本身获取的距离的限制，大多数深度相机的可测深度范围在1米以外，而自动抓取定位需要较近距离来确定物体的位置。
+另外纯二维视觉来做抓取区域判断有诸多限制，如视角、相机与物体距离、光照条件等问题，因而检测真实场景下物体的可抓区域存在许多困难。相对而言，其它系统例如 3D 室内场景建模\allowbreak \cite{DBLP:journals/tcyb/HanSXS13}\allowbreak \cite{DBLP:journals/ijrr/HenryKHRF12}只需在大量的RGB-D匹配后生成 3D 图像。 再者，因为在无其他的传感器设备的情况下，仅依靠深度摄像机，真实场景物体在不同角度的会有不同的三维表面信息，这也使得物体抓取的难度陡增。除非像机器人自动导航系统那样，再加入其它传感器设备来辅助定位，以提高精度。
+	
+机器人抓取物体任务的实现是机器人智能化的一种重要体现，单纯从二维视觉精度可能会受影响，加入多组传感器则会使价格成本增加，同时考虑更多复杂算法以适应实际场景则时间复杂度陡增。
+因此，目前一些先进的机器人自动定位抓取方案还是较难实现民用。
+	
+	%当今机器人系统中的许多研究都是利用RGB-D数据展开视觉伺服。 3D 导航系统利用立体相机来实现帧间对齐以及解决机器人的回环检测问题。经典的迭代近邻点（ICP）\allowbreak \cite{DBLP:journals/pami/BeslM92}就是用来进行帧间匹配的算法；Henry等人\allowbreak \cite{DBLP:journals/ijrr/HenryKHRF12}对RGB-D相机用于稠密 3D 室内地图的机器人自动导航做了相关研究；Prusak等人\allowbreak \cite{DBLP:journals/ijista/PrusakMRSK08}则融合了Prakhya等人\allowbreak \cite{DBLP:conf/icra/ManojLLQ15}提出了稀疏深度测程法（SDO）来进行关键点SURF或NARF的检测，来帮助RGB-D相机矫正数据；Peasley和Birchfield\allowbreak \cite{DBLP:journals/trob/PeasleyB15}进一步利用几何学与颜色信息来解决距离限定问题。
+	
+\section{本文工作}
+	基于上述研究背景，本文针对桌面级刚体物体的抓取问题，利用RGB-D深度相机来进行场景物体可抓区域的定位。本文首先对视觉驱动的机械臂抓取进行综述，进而提出了一种基于深度相机的场景物体定位与抓取算法，
+实验表明抓取区域的定位效果能够指导机械臂进行抓取；本文还实现了一个基于深度相机的机械臂实物抓取系统，以演示机械臂抓取的过程。
+	
+	本文的具体工作如下：
+	\label{TODO------------------THISPAPER}
+	%本文工作 综述部分欠缺
+	\begin{enumerate}
+		%\item 对机器视觉与视觉伺服的发展做了回顾，并对当前机器人的发展以及物体抓取定位做了简要综述
+		%\item 针对桌面级常见刚体物体 阐述了提出的场景物体定位与抓取的算法框架，并介绍了算法需要进行预处理部分的工作
+		\item 结合深度数据和颜色数据的场景物体筛选：利用深度信息进行场景空间分割，使用颜色信息对区域分类判别；
+		\item 利用三维点云的配准进行物体的抓取区域的定位，通过局部点云与整体点云配准以获取变换矩阵，来将模型预定义区域转换到实际点云空间；
+		\item 基于Intel Realsense F200深度相机和Dobot Magician机械臂，借助OpenCV与\\
+				PCL开源库实现机械臂实物抓取系统；
+	\end{enumerate}
+
+\section{论文结构}
+
+	本文一共六章。第一章为绪论，介绍了机器人应用研究的相关背景，以及本文的主要工作。第二章主要介绍视觉与机器人的历史以及当前视觉伺服的研究进展和物体抓取研究综述。
+第三章描述了本文提出的基于点云配准的机械臂自动抓取物体方法中利用深度信息进行区域分割、利用颜色信息进行物体分类的方法。
+第四章为本文算法的核心内容，即结合RANSAC和ICP的三维点云数据进行模型配准，以获取物体的可抓取区域的定位。第五章讨论了基于深度相机的实物抓取原型系统的具体实现，给出了在现实中使用本文方法驱动机械臂进行物体抓取的相关配置以及抓取效果。
+第六章总结全文，给出了本文的贡献、不足以及对未来工作的展望。
+
+\chapter{研究进展综述}
+	机器人行为认知是通过视觉传感器令机器人具有人类的感知能力，对场景中的空间信息进行理解，同时对物体语义剖析的过程，是基于机器视觉，利用各类传感器感知、识别与理解并针对理解做出相应行为。
+通过机器视视觉的语义驱动是实现机器人行为认知的重要手段。
+	
+\section{机器视觉的发展}
+	在20世纪50年代初，机器视觉的萌芽初现，起初是针对二维图像进行一些简单的图像处理工作；到了20世纪60年代，Roberts建立了“积木世界”的模型，通过该模型将环境限定，即环境中的物体由多面体组成，
+从而开创了三维立体视觉的研究；1977年，英国的David Marr教授从计算机科学的观点出发，结合数学、心理学以及神经学，首创视觉计算理论（后人将其命名为Marr三层视觉理解理论）\allowbreak \cite{marr1976understanding}，使得机器视觉走上了新纪元。然而天妒英才，Marr教授中道崩殂，不幸于1980年11月17日在波士顿病死，年仅35岁。为纪念计算神经学的创始人David Marr教授，从1987年开始，国际计算机视觉大会（ICCV）委员会以Marr教授名字命名的马尔奖（Marr Prize）\allowbreak \cite{Marr-Prize}成立，为计算机视觉领域的最高荣誉。虽然Marr教授故去，但20世纪80年代至今，计算机视觉领域蓬勃发展，新概念、新方法和新理论层出不穷，都是依托在Marr理论的框架下。
+Marr视觉理论已成为机器视觉领域的扛鼎框架，对计算机视觉走向产生了深远影响。
+	
+	现如今机器视觉的发展已渗透于实际生活的各个方面，同时对机器人行为指导也起了关键作用，其中基于视觉伺服的机器人驱动框架就是依托于机器视觉的相关应用所展开的。
+
+\section{视觉伺服控制的现状}
+
+	如图\allowbreak \ref{FIG Servo}所示，视觉伺服的架构由四部分组成：任务分配、视觉系统、控制系统和机器人。任务分配是指需要机器人做的具体任务，即下达的指令；视觉系统对输入视觉信息作出处理；控制系统而是对视觉反馈信息进行处理以指导机器人进行操作；而机器人则需在执行任务之后将任务反馈回任务分配模块。其中，视觉系统的信息处理是机器人的双眼，能体现视觉伺服的智能化。
+
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=\textwidth]{./Picture/Introduction/framework.eps}
+		\caption{视觉伺服系统架构}
+		\label{FIG Servo}
+	\end{figure}
+
+	视觉伺服控制指利用视觉进行系统反馈以驱动控制，涉及计算机视觉、机器人技术和控制理论等多个领域。其中，Hutchinson等人分别于96\allowbreak \cite{DBLP:journals/trob/HutchinsonHC96}，06\allowbreak \cite{DBLP:journals/ram/ChaumetteH06}，07\allowbreak \cite{DBLP:journals/ram/ChaumetteH07}年发表三篇视觉伺服控制的综述性论文，对视觉伺服控制的研究起到了引导作用。设计视觉伺服系统的关键在于视觉系统处理和控制策略的实现。在视觉系统方面需考虑处理效果，动态性能和噪声处理等问题；而控制策略方面是针对系统中模型不确定性进行约束处理。这里我们着重介绍通过视觉信息驱动部分，即视觉系统的组成部分。
+	
+	视觉系统主要由视觉信息元素获取和视觉信息处理两部分构成。其中，信息元素获取是在相机模型下，将三维空间映射到二维图像空间的过程（若使用RGB-D相机则可实现实际三维空间到相机三维空间的映射过程），而视觉处理则是利用视觉图像信息进行各类复杂处理后进行视觉反馈的过程。
+	
+\subsection{典型的相机模型}
+	表\allowbreak \ref{TAB Cam Model}展示了三种常见的典型相机模型，主要包括针孔模型\allowbreak \cite{DBLP:journals/ram/ChaumetteH06}\allowbreak \cite{DBLP:journals/ram/ChaumetteH07}、球面模型\allowbreak \cite{DBLP:journals/trob/FomenaTC11}\allowbreak \cite{DBLP:journals/ras/TahriACM13}和统一化模型\allowbreak \cite{DBLP:conf/eccv/GeyerD00}\allowbreak \cite{DBLP:conf/isrr/CorkeM09}。统一化模型其实是对球面模型的扩展, 其原理是将各类相机的图像映射到归一化球面上去。
+	%针孔模型\allowbreak \cite{DBLP:journals/trob/IwatsukiO05}\allowbreak \cite{DBLP:conf/iros/CorkeSC09}
+	%球形模型\allowbreak \cite{DBLP:journals/trob/TahriMCC10}\allowbreak \cite{DBLP:conf/icra/Corke10}
+	\begin{table}[htbp]
+		\centering
+		\caption{典型相机模型}
+		\begin{tabular}{ccrrrr}
+			\toprule
+			\multicolumn{1}{c}{模型} &       \multicolumn{1}{c}{应用范围} &         \multicolumn{1}{c}{优点} &         \multicolumn{1}{c}{缺点}   \\
+			\midrule
+			针孔模型 &       透视相机 & 模型简单、图像畸变小 & 视野范围小、相机撤退   \\
+			球面模型 &       全景相机 & 视野较广、旋转不变性 & 图像畸变大、模型复杂   \\
+			统一化模型 &     各种相机 & 旋转不变、归一化设计 & 图像畸变大、模型复杂 \\
+			\bottomrule
+		\end{tabular}
+		\label{TAB Cam Model}
+	\end{table}
+	 这里还要提一下，常见的一些RGB-D深度相机，如Kinect、Realsense等，其相机模型大多采用的是针孔模型，只是在此基础上通过双摄像头进行信息获取，一个获取色彩信息，另一个利用红外等手段进行像素级别的测距以获取深度信息，
+从而形成色彩图和深度图。
+	
+\subsection{视觉信息处理}
+	 视觉信息处理主要有基于图像特征和多视图几何的方法对输入图像进行信息反馈。此外还有基于位置的方法，但该方法是将视觉系统直接隐含在了目标识别和定位中，虽然简化控制器的设计，不过须已知目标物体模型且对图像噪声和相机标定误差敏感。
+此处主要介绍图像特征法和多视图几何法。
+	
+\subsubsection{图像特征法}
+	如表\allowbreak \ref{TAB Method}所示，为常用的基于图像特征的视觉信息处理方法，主要分为图像特征点法，光流场，图像矩，核采样以及互信息。图像特征法是利用利用SIFT\allowbreak \cite{DBLP:journals/ijcv/Lowe04}、HOG\allowbreak \cite{DBLP:conf/cvpr/DalalT05}或SURF\allowbreak \cite{DBLP:journals/cviu/BayETG08}等特征进行图像视觉信息描述，在以往的视觉伺服中应用较为广泛且研究相对成熟，但是容易受到图像噪声和物体遮挡的影响\allowbreak \cite{DBLP:journals/mva/GilMBR10}。故此，学术界又提出了基于全局图像特征的方法，增加图像信息描述以增强视觉系统的鲁棒性，但缺点是模型较为复杂，一般还是利用局部线性化模型进行控制，但仅能保证局部的稳定性。光流场\allowbreak \cite{DBLP:journals/trob/HerisseHMR12}是图像中由像素构成的二维瞬时场，即二维速度矢量，同时也能恢复物体三维结构和运动\allowbreak \cite{DBLP:conf/isr/MalzahnPFHB10}。光流主要应用还是在目标对象分割，跟踪任务以及状态恢复。互信息\allowbreak \cite{DBLP:journals/trob/DameM11}是信息论中的一种有用信息度量，用于度量两个对象的相互性，也常用与机器人的视觉路径规划\allowbreak \cite{DBLP:journals/ras/DameM13}。
+	
+	%核采样\allowbreak \cite{DBLP:conf/iros/KallemDSHC07}
+	
+	\begin{table}[htbp]
+		\caption{图像特征法分类}
+		\raggedleft
+		\begin{tabular}{cll}
+			\toprule
+			\multicolumn{1}{c}{方法} & \multicolumn{1}{c}{优点} & \multicolumn{1}{c}{缺点} \\
+			\midrule
+			特征点 & 模型简单, 控制器设计方便 & 对噪声敏感, 容错性差 \\
+			光流场   & 反映运动状态, 作为辅助控制信息 & 对噪声敏感, 计算复杂 \\
+			%图像矩   & 自由度之间耦合较小, 对噪声不敏感 & 绕轴旋转的自由度不好控制 \\
+			%核采样   & 无需图像分割, 对噪声不敏感 & 四自由度控制, 需要参数整定 \\\\
+			互信息   & 对噪声不敏感, 可用于多模态图像 & 计算量较大 \\
+			\bottomrule
+		\end{tabular}%
+		\label{TAB Method}%
+	\end{table}%
+\subsubsection{多视图几何法}
+	多视图几何\allowbreak \cite{DBLP:books/daglib/0015576}是描述多幅图像之间的关系，能间接反映相机之间的几何关系。多视图几何法中常用的几类方法如表\allowbreak \ref{TAB MMethod}所示，包括单应性（Homo-graphy）\allowbreak \cite{DBLP:journals/tsmc/Lopez-NicolasGBSGH10}、对极几何（Epipolar Geometry）\allowbreak \cite{DBLP:journals/trob/BecerraLS11}以及三焦张量（Trifocal Tensor）\allowbreak \cite{DBLP:journals/arobots/BecerraSMH14}。当两个视图之间的极点与相对姿态非同构时，即便极点为0，仅能保证二者共线，并不能保证二者姿态一致。单应性矩阵描述的是共面特征点在两个视图之间的变换关系，
+可以唯一决定二者的相对姿态。对于非平面物体，就需要结合对极几何的方法进行处理，以构造平衡点附近与姿态同构的误差系统。而三焦张量在是一种更加通用的方法，不存在奇异性问题且对目标形状没有特殊要求。
+目前，结合对极几何和三焦张量的方法主要用于平面移动机器人的控制，在六自由度应用控制中还有待研究。
+	\begin{table}[htbp]
+		\centering
+		\caption{多视图几何法分类}
+		\begin{tabular}{ccll}
+			\toprule
+			方法    & 构造方式 & \multicolumn{1}{c}{优点} & \multicolumn{1}{c}{缺点} \\
+			\midrule
+			单应性   & 矩阵元素 & 无奇异性、计算简单 & 描述共面特征点、与目标模型有关 \\
+			对极几何  & 极点    & 用于非平面场景 & 奇异性、平面下病态、与姿态非同构 \\
+			三焦张量  & 张量元素 & 不限场景、无奇异性 & 计算量大、模型较为复杂 \\
+			\bottomrule
+		\end{tabular}%
+		\label{TAB MMethod}%
+	\end{table}%
+	
+	\section{机器人研究现状}		
+	 机器视觉的发展也大大推动的机器人行为认知的研究。工业型机器人的工作范围相对固定，是基于一些定式下的任务，这种类型的机器人在西方以德国为首的国家中已相当成熟。但若要机器人具有更智能的功能，即服务型机器人，则需要更多的传感器来驱动，其中最重要的一环就是视觉传感驱动。以视觉传感器为主，再辅以多种其他传感器的手段已在当今服务型机器人研究领域流行开来。故通过视觉伺服架构进行机器人的行为驱动逐渐成为研究热点。现今国外有大量的以视觉驱动为主研究机器人的公司或科研机构，其中大多致力于服务型机器人的研究，并提供机器人的开发平台：
+
+	法国Aldebaran Robotics公司研制NAO机器人，配有视觉、红外、压力、超声波等多种传感器。利用眼睛部位安装有双目视觉系统的NAO机器人可通过边缘检测与场景分割完成对目标物体的识别，并建立目标物体的 3D 模型；也可利用图像处理技术来获得目标物体和场景的三维信息，再计算相应的抓取姿态，最后对目标物体进行抓取。
+	
+	 美国的佐治亚理工学院研制出了一款家庭服务型机器人EL-E。EL-E的功能相对单一但目的明确，主要用途是在室内抓取目标物体，包括瓶子、遥控器、药片等等，以辅助老人或残疾人进行物体抓取任务。EL-E也安装了双目立体视觉传感器和一个全维视觉传感器。EL-E机器人可在用户的绿色激光指挥棒的指导之下接近目标，然后对场景进行检测，分割出场景中的目标物体，从而计算目标质心的三维坐标以及物体在场景平面的旋转角度以对其进行抓取。EL-E在执行抓取之前没有对目标物体的识别，是通过图像处理技术把目标物体从背景中分割出来的方式进行的。由于此执行抓取目标任务的特点，EL-E服务型机器人也被称为激光制导机器人。
+	
+	 德国卡尔斯鲁厄大学研制了一台仿生的双臂机器人ARMAR-III，这款机器人主要为协助人们在厨房进行相关操作，如抓取碗、碟子等物品。ARMAR-III在眼部位置安装了两台独立的彩色摄像机，利用双目视觉以此来模拟人体视觉感知，这两台摄像机既可以单独转动也可以一起转动。许多研究人员也基于ARMAR-III的开发平台实现了多种常用的视觉驱动算法。
+	
+	 国内服务型机器人要以中科大的可佳机器人为代表。第18届RoboCup机器人世界杯比赛中，中国科学技术大学自主研发的“可佳”智能服务型机器人荣获冠军。这也是我国服务型机器人首次在机器人世界杯上获得第一名，在我国服务型机器人领域取得了历史性的突破。
+
+	\section{物体抓取区域定位研究现状}	
+	当下基于视觉伺服框架的机器人行为驱动研究正如火如荼展开，智能机器人行为本身一个重要的任务就是实现自动取物任务，对桌面物体的定位与识别，并通过机械臂抓取等方式进行物体搬运工作。正如图\allowbreak \ref{FIG Servo}的视觉伺服架构所示，在机器人实物抓取系统中，任务分配是物体抓取，视觉系统是根据RGB-D信息进行处理给出抓取区域在相机空间位置，控制系统是根据视觉系统反馈的相机空间位置进行转换后传导给机器人执行任务，机器人的执行任务就是移动相应机械臂进行物体抓取。本节重点在于视觉系统上的可抓取区域定位以及控制执行，机器人的规划移动轨迹、确定力度、方向等任务并不在本文探讨范围之内。
+	
+	基于视觉的机器人抓取系统的实现在图像坐标系和机械臂坐标的标定的前提下，利用图像处理和视觉算法将目标进行三维表示后，再进行物体抓取位置确认，最后实施坐标转换，从而实现抓取。
+物体的检测识别以及物体抓取部位的确定都是由视觉系统所给出的，而对于坐标转换，机械臂移动等任务则是控制系统所需实现的。在抓取任务中，视觉定位算法是整个系统的核心所在，同时也是机器智能的体现。
+
+	%%
+	机械臂抓取问题是时下研究的热点话题，本文回顾一下抓取问题的发展与现状：
+	
+	早期研究中，以Bicchi\allowbreak \cite{DBLP:journals/ijrr/Bicchi95}以及Howard和Kumar\allowbreak \cite{DBLP:journals/trob/HowardK96}为代表，利用力封闭与形封闭来确保稳定的抓取。类似这种思路是通过假设物体上区域点联通，同时依靠较好的 3D 物体模型，此类方法在实际中不具有扩展性，较难实施。另一条研究路线是以数据驱动\allowbreak \cite{DBLP:journals/trob/BohgMAK14}为导向，需要获取物体的整个三维模型，同时还需使用预先计算好的抓取数据，此类抓取数据有专门研究人员进行了归纳整理，具有代表性的就是Khoury\allowbreak \cite{el2008handling}的物体整体模型抓取集，Goldfeder\allowbreak \cite{DBLP:conf/iros/GoldfederCPDA09}的局部数据抓取位置集以及Brook\allowbreak \cite{DBLP:conf/icra/BrookCH11}的多物体抓取平面集。
+	
+	使用图片数据进行自动抓取系统在进行抓取检测时，需要一个人工标定抓取数据集来学习出抓取定位模型，如Saxena\allowbreak \cite{DBLP:journals/ijrr/SaxenaDN08}和Kehoe\allowbreak \cite{DBLP:conf/icra/KehoeMCKG13}。随着深度学习\allowbreak \cite{DBLP:journals/nature/LeCunBH15}大浪潮的席卷，抓取检测也开始在深度学习基础上进行探索\allowbreak \cite{DBLP:journals/ijrr/LenzLS15}，但是深度学习的方法首先需要大量的训练数据，其次还需要性能较好的GPU硬件设备（训练和检测阶段都需要高性能硬件）。一般来说，基于深度学习的策略不太适合实时的应用。
+	
+	还有一些根据物体原始模型来进行近似估计的方法：Miller等人\allowbreak \cite{DBLP:conf/icra/MillerKCA03}基于物体存在已知模型的前提下，在原始模型基础上进行抓取部位选择；	\allowbreak Yamanobe和\allowbreak Nagata\allowbreak \cite{DBLP:conf/robio/YamanobeN10}则是人工标定大量物体的抓取部位；Huebner等人\allowbreak \cite{DBLP:conf/iros/HuebnerK08}则利用 3D 数据点通过分界物体模型来确定可抓部分，但分解操作的时间消耗通常是巨大的。Miller等人\allowbreak \cite{DBLP:conf/icra/MillerKCA03}和Huebner等人\allowbreak \cite{DBLP:conf/iros/HuebnerK08}本质上都是依靠软件模拟抓取位置的生成。模拟的方法有时不一定能与真实的物理世界吻合。Rusu等人\allowbreak \cite{DBLP:conf/humanoids/RusuHDBB09}在三维点云数据上预先标定几何学的标签，然后利用几何特征来对物体的可抓取部位面片进行生成。而Jain和Argall\allowbreak \cite{DBLP:conf/icra/JainA16}不进行面片生成，直接在原始点云输入上操作，根据物体形态学分析从而扩展到任意物体抓取的方法。
+	
+	\section{本章小结}
+	 本章对机器人行为认知进行了阐述，首先回顾了机器视觉的发展历史，探讨了视觉伺服的研究现状，对服务型机器人的典型案例作了回顾，最后对机器人执行物体定位与抓取任务做了综述，对当前自动机械抓取问题研究的进展进行了综述。
+	
+
+
+\chapter{结合深度和颜色信息的场景物体检测}
+	在进行抓取区域定位前，必须检测出物体所在的位置，才能在物体上继续寻找物体的可抓区域。在物体的候选区域筛选上，有两种方式可以进行，一种是直接用 3D 点云模型去匹配整个场景点云，从而哪类物体的位姿以及物体类别，并且连并点云配准的任务一起完成，从而直接定位物体抓取区域，但是这种方式的耗时巨大，如有$N$类物体就意味着要每次都匹配$N$个 3D 点云模型，而且使用点云模型去匹配整个场景的可靠度不高，场景点云其余的干扰甚大，直接扰动配准的精确度；第二种就是在2D下进行物体候选区域检测，以及物体的类别确定，在缩小范围的空间内再进行点云配准时可以更加精准。
+	
+	另外，还要基于一个假设，机械臂在实施桌面级物体抓取时，往往相对而言距离很近，同时物体很少有被遮挡的情况，也就是说物体一般占据摄像头的大块前景区域，且深度信息较密集，易于分割。
+基于上述假设，我们提出了一种基于深度信息的分割算法，将二维图像空间分割成$topk$个独立候选区域，再通过分类器对每个候选区域进行判别，最终留下含有物体的候选区域，并附上的分类预测标签。
+	
+	
+	在本章末尾，深度分割颜色分类的方法根据不同物体的缩放比例进行特征提取，并进一步给出了分类准确率、以及在相同机器环境下的计算效率对比与分析。
+	%在本章末，根据不同的物体放缩比例进行特征提取后比对分类准确率以及在同等机器环境下的速度对比情况。%，以及stacking策略下分类准确率与速度的比比对情况。
+			
+\section{基于深度图像的区域分割}
+
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[深度数据]{
+			\label{SUB depth}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/depth.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[区域增长]{
+			\label{SUB region-growing}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/merge.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[合并分割]{
+			\label{SUB merge}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/seg.eps}
+			\end{minipage}
+		}
+		\caption {基于深度图像的区域分割}
+	\end{figure}
+	
+	图\allowbreak \ref{SUB depth}给出了Intel Realsense F200相机采集的深度数据示例。其中，该图片上的每一个像素点的值都代表了摄像机原点到该处实际位置之间的距离，单位通常为毫米，其图片像素点的明暗程度就代表距离摄像机的远近。在大部分情况下，深度图像上的值都是较为精确的，但是由于某些情况，深度摄像机无法给出准确判断，对于这些不确定的值，深度相机一般该处像素值置0。对于0值像素，在图\allowbreak \ref{SUB depth}中显示出来就是黑色的像素区域。造成不确定点值的原因有如下几种：1）像素点的实际位置离摄像机原点太远，每一种深度摄像机都会有相应的距离使用范围，超过这个距离范围就无法获取准确信息，类似图\allowbreak \ref{SUB depth}中大片的背景区域就是因距离太远而置0；2）由于一些物体材质原因会使基于红外的相机产生漫反射，无法收到反馈信息，如图\allowbreak \ref{SUB depth}中饮料瓶的上方一部分黑色包装就是由于这种情况所导致的。
+	
+	基于深度相机的特性，我们在深度图像上进行区域分割策略，将空间分割成互相邻的区域。在算法\allowbreak \ref{ALG Segmentation }中，输入为深度数据: $Depth$，预定主分割集的个数${topk}$。1$\sim$3行是基于深度信息（距离）的粗略分割，选出$topk$个主分割集。但是如图\allowbreak \ref{SUB region-growing}所示，由于深度相机自身具有距离以及光学上的限制，再加上可能有局部点的扰动，会在主分割区域中产生细小的孔洞以及一些周边的杂碎区域。4$\sim$10行就是处理孔洞与杂碎区域，将其合并到主分割集中。
+\begin{algorithm}[htbp]
+	\caption{\qquad 基于深度图像的区域分割}
+	\label{ALG Segmentation }
+	\begin{algorithmic}[1]
+		\REQUIRE
+		\qquad	深度数据: $Depth$ \\
+		\qquad	\quad 主区域个数 : ${topk}$ \\
+		
+		\renewcommand{\algorithmicensure}{\textbf{过程:}}
+		\ENSURE
+		
+		
+		\STATE 在$Depth$上使用区域增长算法找出全黑分割集$BS$和深度分割集$DS$
+		\STATE 将$DS$中的点集按点的数目降序排列
+		\STATE 从$DS$中选出前$topk$个分割点集作为主分割集$MS$
+		
+		\FOR {$seg \in  (DS - MS) \cup BS$}
+		\FOR {$p \in seg$}
+		\STATE $CS \leftarrow \{ms|ms \in MS \wedge p\ in\ ConvexHull(ms)\}$
+		\STATE $SEG \leftarrow \mathop{\arg\min}_{ms}(distance(ms), ms\in CS)$	
+		\STATE $SEG \leftarrow SEG \cup \{p\}$
+		\ENDFOR
+		\ENDFOR
+		
+		\renewcommand{\algorithmicensure}{\textbf{输出:}}
+		\ENSURE
+		\qquad			 主分割集: ${MS}$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{区域增长算法}
+	算法\allowbreak \ref{ALG Segmentation }的第1步，与经典的区域增长算法\allowbreak \cite{DBLP:journals/pami/SnyderC83}相类似，只不过是作用在$Depth$\allowbreak数据上而不是$Color$上，因而可以看做是一种基于距离的区域增长。其中增长的规则使用领近点值相差$2$，即深度图像上近邻点值相差$2$时就停止近邻合并（深度图像的值表示的是距离，在Realsense中，深度图像值的单位是毫米，这也意味着临近点距离若大于2毫米时就不认为该两点在空间距离上临近）。在该规则作用下的区域增长，可以获取分割区域集合，这个集合又可以分成两个集合：若分割集中所有点的深度值都为$0$，归入全黑分割集$BS$，否则归入深度分割集$DS$。
+	
+	对于全黑分割集$BS$，我们不关心，主要精力还是集中在深度分割集$DCR$上。因此算法\allowbreak \ref{ALG Segmentation }的第2步在深度分割集$DS$根据集合中元素（即每一个分割点集）包含的点数个数由大到小进行排序，第3步就选出$topk$ 个分割点集组成主分割集$MS$，以待合并区域。区域增长的初步分割得到的效果如图\allowbreak \ref{SUB region-growing}所示（图中每块分割集的颜色仅为示意像素点归属的分割集，并无其他含义），可以看到有很多细碎的区域，以及瓶子上方一块因不可靠点而产生的缺损。因此需要进一步的合并来优化主分割集。
+
+\subsection{区域合并规则}
+	在区域增长的粗略分割洗下，得到了含有$topk$个分割区域的主分割集$MS$，接下来就需要对$MS$进行精炼。在算法\allowbreak \ref{ALG Segmentation }的第4步中，集合$(DS - MS) \cup BS$指的是所有分割区域集中去掉主分割集的其他分割区域集合。对于这个集合中的每一个点集，都需要对这个点集中的每个点进行检查。在进行检查规则阐述之前，需要做个定义，我们定义一个分割点集$seg$的距离为该点集中每个点的深度值的平均值。
+	
+	具体检查规则如下：首先，检查该点属于哪些主分割集（属于的含义是指该点在该分割集的凸包内）；之后从中挑出一个平均深度值与该点深度值接近的，最后将这个点合并到最接近的分割点集中去。
+	
+	算法\allowbreak \ref{ALG Segmentation }的4$\sim$10步的两重循环就是在检查上述规则。最终输出主分割集$MS$，效果如图\allowbreak \ref{SUB merge}所示，得到$topk$个主分割区域，（这里$topk$等于5），相对于图\allowbreak \ref{SUB region-growing}\allowbreak来说，瓶子的黑色部分被填补了，同时边缘也合并了细小区域，相当于更加润滑了，使得更容易进行区域包围框选择等操作，更有助于指导下一阶段的物体分类任务。
+
+\section{基于颜色数据的物体分类}
+	\begin{figure}
+		\centering
+		\subfigure[色彩数据]{
+			\label{SUB rgb}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/color.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[候选区域]{
+			\label{SUB region}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/regions.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[分类结果]{
+			\label{SUB classification}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/classification.eps}
+			\end{minipage}
+		}
+		\caption {基于颜色信息的物体分类}
+	\end{figure}
+	在区域空间分割之后，我们获取了主分割集$MS$。接下来，需要利用主分割集$MS$，颜色数据$Color$以及预处理阶段训练处的SVM分类器$Classifier$进行物体类别判断，其中输入的颜色数据$Color$如图\allowbreak \ref{SUB rgb}所示，其像素点与深度图像一一对应的，因此从深度信息上得到的区域分割集仍可作用在该图上。
+	
+	算法\allowbreak \ref{ALG Classification }的目的是对上一步分割结果进行分类筛选，过滤掉背景区域，留下包含物体的区域，并且预测出该区域所属物体的类别标签。具体需要经过
+	\begin{enumerate}
+		\item 分割区域抽取矩形包围框，并将包围框区域放缩统一大小
+		\item 抽取HOG特征，后使SVM对其进行分类判断，去除背景，并上附上预测类别标签，从而获取一个$\{<$区域,标签$>\}$的集合
+	\end{enumerate}
+	
+	\begin{algorithm}[htbp]
+		\caption{\qquad 基于颜色信息的物体分类}
+		\label{ALG Classification }
+		\begin{algorithmic}[1]
+			\REQUIRE
+			\qquad	颜色数据: $Color$ \\
+			\qquad	\quad 主分割集 : $MS$  \\
+			\qquad  \quad  物体分类器: ${Classifier}$\\
+			
+			\renewcommand{\algorithmicensure}{\textbf{过程:}}
+			\ENSURE
+			\STATE  {$Rect \leftarrow \{r|r=BoundBox(ms), ms\in MS\}$}			
+			\STATE	{$Candidate \leftarrow \emptyset$}
+			\FOR	{$rect \in Rect$}
+			\STATE	{${region} \leftarrow$ Extract-Region$(Color, rect)$}
+			\STATE 	{${feature} \leftarrow$ Calculate-HOG$(region)$}
+			\STATE	{$label \leftarrow$ Classify$({Classifier}, {feature})$}
+			\IF	 	{$label \neq 0$}
+			\STATE	{$Candidate \leftarrow \{<rect,label>\} \cup Candidate$}
+			\ENDIF
+			\ENDFOR
+			
+			\renewcommand{\algorithmicensure}{\textbf{输出:}}
+			\ENSURE
+			\qquad			 候选区域集: $Candidate$
+		\end{algorithmic}
+	\end{algorithm}
+	
+
+\subsection{方向梯度直方图}
+	在进行物体类别之初，我们先简要介绍一下进行物体分类的特征——方向梯度直方图（Histogram of Oriented Gradient，HOG）\allowbreak \cite{DBLP:conf/cvpr/DalalT05}。方向梯度直方图（HOG）最早提出时应用于行人检测任务\allowbreak \cite{DBLP:conf/eccv/BenensonOHS14}。HOG特征是计算机视觉中用来进行物体检测与识别的特征描述子，统计图像局部区域的梯度方向直方图。HOG特征的提出是基于一个事实：在一张RGB图像中，梯度方向的密度分布能较好地描述目标局部形状，即图像中的梯度变换可以表征该图的局部特征。HOG的本质就是梯度的统计信息，以梯度的大致统计来压缩表征图片中的信息。
+	
+	 在物体抓取定位任务中，物体常常处于摄像机的相对前景区域，机械臂在距离物体较近时才会采取抓取定位，也就是摄像机往往距离物体较近。因此在物体的分类环节并不需要复杂的以深度学习为基础的物体识别方法（以CNN为主物体识别方法常常是在解决复杂背景下的物体识别任务，同时需要大量GPU进行训练与测试，有实验表明以CNN为基准的方法在进行测试时，GPU和非GPU情况下时间消耗相差百倍），HOG则是一种很好GPU-Free的方案，在物体类间分布区分度较大时，既能有效表征物体特点，又能快速分类识别。由于HOG是对图像局部区域的梯度统计，在几何学和光学上能保持较好的不变性；再者，在精细方向上抽样和较强的局部光学归一化等条件下，桌面级的物体可区分度是很高的（从后续的实验结果也可以看出，各类分类准确率基本都在$90\%$以上）。
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[HOG中的分块机制]{
+			\label{SUB block cell}
+			\includegraphics[width=0.37\textwidth]{./Picture/HOG/hog1.eps}}
+		\subfigure[梯度信息统计]{
+			\label{SUB gradient info}
+			\includegraphics[width=0.6\textwidth]{./Picture/HOG/hog2.eps}}
+		\caption{HOG特征描述子}
+	\end{figure}
+	
+	
+	HOG的特征提取过程大致分为如下步骤：
+	\begin{enumerate}
+		\item 输入一张彩色图片$RGB$，并将其灰度化成图片$Grey$
+		\item 对灰度化后的图像$Grey$，利用Gamma校正法进行颜色空间的归一化；
+		\item 计算灰度图像$Grey$中每个像素的梯度；
+	    \item 将图像划分成小细胞块（cell），统计每个cell的梯度直方图，即可形成每个cell的特征描述子；
+		\item 将每几个细胞块（cell）组成一个分块（block），一个block的HOG特征描述子就是其内所有cell的特征描述子的集合；
+		\item 将灰度图像$Grey$内的所有block的特征描述子串联起来就是该图像的HOG特征描述子
+	\end{enumerate}
+	
+	第2步中颜色空间归一化的目的是调节图像的对比度，降低图像局部的阴影和光照变化的影响，同时抑制部分噪音干扰。对灰度图像$Grey$进行Gamma压缩的公式为
+	\begin{equation}
+		I(x,y) = I(x,y)^{gamma}
+	\end{equation}
+	其中，$I(x,y)$为灰度图$Grey$上坐标为$(x,y)$的像素亮度；
+	
+	第3步的计算图像横纵坐标方向的梯度不仅可以捕获图片上的纹理和轮廓信息，还能进一步削弱光照影响，图像中$(x,y)$处的梯度计算如下：
+	\begin{equation}
+		\begin{aligned}
+		& G_x(x, y) = H(x+1, y) - H(x-1, y) \\
+		& G_y(x, y) = H(x, y+1) - H(x, y-1) \\
+		& G(x, y) = \sqrt{G_x(x, y)^2 + G_y(x, y)^2} \\
+		& \alpha(x, y) = \arctan(\frac{G_y(x, y)}{G_x(x, y)})
+		\end{aligned}
+	\end{equation}
+	上述公式中，$G_x(x, y)$与$G_y(x, y)$分别为$(x,y)$处像素的$x$方向与$y$方向的梯度幅值，$G(x, y)$为$(x,y)$处总体梯度幅值，而$\alpha(x, y)$是梯度方向；
+		
+	第4步的细胞块(cell)和第5步的分块（block）是将图片本身进行区域划分的过程，如图\allowbreak \ref{SUB block cell}所示，每$4\times4$个像素（pixel）组成一个细胞块（cell），每$4\times4$个cell又组成一个分块（block）。
+	
+	在进行HOG特征描述子的计算时，每个cell的描述子是进行如下计算：先将整个梯度方向平均分成9个方向块，也就是说360度分成9个桶统计梯度幅值的加权值，如图\allowbreak \ref{SUB gradient info}所示，如果这个像素的梯度方向落在区间$\left[ 60, 80 \right)$上，则该区间的方向统计桶中数值就加上该处梯度的幅值；同时，也如图\allowbreak \ref{SUB gradient info}中所示,区间$\left[ 60, 80 \right)$和$\left[ 240, 260 \right)$是等价的都会落在同一个桶中。
+	
+	 另外，HOG特征描述子中的block与block之间是允许有重叠部分的，这就又需要引入一个步长（step）的概念。如果block划分的步长和block的边长一样，那么计算HOG时，block与block之间就无交集，但是一般来说，HOG的计算往往需要考虑有交叠的情况，因为这样可以防止局部噪音的影响，通过周围的局部信息加权后弱化噪音的影响。在Dalal\allowbreak \cite{DBLP:conf/cvpr/DalalT05}的经典HOG特征设置时就是将图片放缩到$64\times128$大小后，规定每个cell包含$16\times16$个像素，每个block包含$2\times2$个cell，每个cell含有9个特征，这样最终会得到一个3780维的HOG特征描述子，而这个描述子就可以用于物体的特征分类任务中。
+	
+	如图\allowbreak \ref{FIG Objects}所示，第一行是采集的物体区域二维颜色图片，这是需要采集场景图片后，人工标框取出的物体区域，即需要人工标定groundtruth，并从原始图片中取出该块区域；第二行是对每个物体区域图片抽取的HOG特征（其中，示例是先将该区域放缩到$96\times 96$后，再按块大小为$16\times16$，细胞块大小为$8 \times 8$，步进为$8$抽取的HOG特征）；第三行则是HOG的可视化效果，也能直观地看出这五类物体在HOG特征上还是具有可分性的。可视化效果是通过MIT的HOGgles方法\allowbreak \cite{DBLP:conf/iccv/VondrickKMT13}来显示的，在此仅助于直观感受HOG特征描述子的形态。
+	
+	\begin{figure}[htpb]
+		\centering
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/11.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/22.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/33.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/44.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/55.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{.05in}
+		\end{minipage}
+		\centering
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/111.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/222.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/333.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/444.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/555.eps}}
+		\end{minipage}
+		\centering
+		\begin{minipage}[b]{.05in}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/1.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/2.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/3.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/4.eps}}
+		\end{minipage}
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=\textwidth, height=.95in]{./Picture/HOG/5.eps}}
+		\end{minipage}
+		\caption{收集物体二维图片样本，抽取物体的HOG特征}
+		\label{FIG Objects}
+	\end{figure}
+	
+\subsection{支持向量机}
+	支持向量机（Support Vector Machine，SVM）最早由Cortes和Vapnik\allowbreak \cite{DBLP:journals/ml/CortesV95}\allowbreak 于 \allowbreak 1995年提出，是一种经典的机器学习算法。在20世纪末至21世纪初，支持向量机风靡一时，大量学者因其优美数学形式，对其进行探索研究，在理论上有许多精巧证明。SVM属于监督学习模型，可用于分类与回归分析。SVM在解决非线性及高维模式识别中表现出诸多独有优势，尤其在小样本上SVM具有很好的泛化能力。
+	
+	 SVM的诞生是基于最大边界理论：平行超平面间的距离或差距越大，分类器的总误差越小，即在较大的裕度下分类器的泛化误差下，一个良好的分类是通过具有到任何类的最接近训练数据点的最大距离的超平面所实现的。如图\allowbreak \ref{SUB general}所示，基于分界线离两边样本距离越大则分类总误差越小的理论假设，实线的分界线的泛化能力就弱于虚线的泛化能力，而SVM算法的目的就是要找出这条虚线。又如图\allowbreak \ref{SUB support vector}所示，两边在类别的虚线（边界）上的样例就是支持向量。支持向量机就是依靠着这几个简单的支持向量与学习得到的参数便可复现实线（即分类平面），故而得名。（在实际训练数据过程中，也有个经验总结——支持向量的数量往往不多，若出现支持向量较多的情况，则很有可能出现过拟合情况）。
+	
+	 SVM将向量投射到一个高维的空间里，在空间中建立一个最大间隔超平面。在分开数据的超平面的两边建有两个互相平行的超平面，即在建立使两个与之平行的超平面间距离最大化的间隔超平面。SVM的一大亮点就是将对偶理论应用于传统的最优化问题中，主要有拉格朗日对偶和最大最小对偶。此外,SVM还能利用核函数技巧（kernel trick）\allowbreak \cite{DBLP:journals/nn/AmariW99}使得能胜任非线性的任务，进行复杂边界的分类，具有很强的泛化能力。
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[泛化能力（Generalization）]{
+			\label{SUB general}
+			\includegraphics[width=0.45\textwidth]{./Picture/SVM/svm2.eps}}
+		\subfigure[支持向量(Support Vector)]{
+			\label{SUB support vector}
+			\includegraphics[width=0.45\textwidth]{./Picture/SVM/svm3.eps}}
+		\label{FIG HOG}
+		\caption{支持向量机(Support Vector Machine)}
+	\end{figure}
+	
+	%我们的应用
+	在上一小节中，我们通过区域分割获取了主分割集${MS}$，其中包含了$topk$个主分割区域。对于每个主分割区域，我们都利用如图\allowbreak \ref{SUB region}所示的白色矩形外围框将其框住。对于一个具体分割$ms$的矩形包围框（BoundBox）计算，遍历其上每个点，找出$x_{min},y_{min},x_{max},y_{max}$后，$(x_{min},y_{min})$和$(x_{max},y_{max})$即为左上点和右下点，即可确定包围框的大小，算法\allowbreak \ref{ALG Classification }的第1行就是计算主分割集$MS$中每个分割的矩形绑定。
+
+	算法\allowbreak \ref{ALG Classification }中的3$\sim$10行是对包围框集$Rect$中每个包围框，我们在颜色图$Color$中将其矩形区域取出。对于这个颜色区域，先放缩到统一大小（与物体分类器训练时放缩的大小统一），再对其以同样的参数设置抽取HOG特征。对于这个特征，我们便可将其放入在预处理阶段训练好的物体分类器${Classifier}$中进行预测，得到的结果为$0 \sim n$,其中$0$表示该区域预测为背景，预测标签为$1 \sim n$表示该区域包含物体，且物体的类别属于预测标签。其中，SVM进行多类分类时采用One-Versus-Rest的策略\allowbreak \cite{DBLP:conf/esann/WestonW99}，即每个类各自训练一个分类器，其中该类样例为正例，其余为负例，预测样本时每个分类器均能有得分，然后取其得分最高的作为该类的预测类别。
+	
+	通过此步骤可以过滤掉干扰的背景区域，筛选出包含物体的候选区域集\allowbreak $Candidate$。\allowbreak $Candidate$就是由矩形包围框和物体的类别标签组成的集合。一般抓取场景下，\allowbreak $Candidate$中元素的个数通常小于等于$1$，也就是说目标物体一般只有$1$，或没有。
+	
+	至此，基于RGB-D数据，通过区域空间的分割，以及特征判别，快速筛选出了目标物体的位置区域，并且预测了目标物体的类别，形成候选区域集。
+
+\section{实验结果}
+	我们在实验室环境下分别采集了五类桌面级物体：瓶子（bottle）、茶杯（cup）、易拉罐（can）、茶壶（teapot）和盒子（box），另外再加上背景作为负类。其中我们在不同的放缩尺度上做了准确度与运算时间效率的统计。
+	
+	如图\allowbreak \ref{FIG Classification-result}所示，分别放缩到$64\times64$，$80\times80$，$96\times96$，$128\times128$后，以块（block）大小为$16\times16$，细胞格（cell）大小为$8\times8$，步进（step）为$8$抽取HOG特征，使用经典线性核的SVM作为分类器进行10-折交叉验证，并统计在各个放缩尺度上的准确度。由图中可以看出准确度差异在各尺度上并不是很大；同时，在计算时间消耗上，我们分别测试了$64\times64$，$80\times80$，$96\times96$与$128\times128$尺寸抽取特征的时间消耗，对单区域进行抽取依次为0.63，0.96，0.98以及1.38毫秒；此外，SVM预测的时间基本均在10微秒的量级，可以基本忽略，故而最终选择计算花费最小的$64\times64$的方式。（单区域的特征抽取时间消耗差距并不是太大，但由于区域分割阶段会产生$topk$个候选区，故需做$topk$次抽取，差距就会变成$topk$倍的单区域特征抽取时间差）
+	
+	% 检测分类结果表
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{./Picture/Table/classification.eps}
+		\caption{不同尺度提取HOG的分类准确率}
+		\label{FIG Classification-result}
+	\end{figure}
+
+\section{本章小结}
+	本章提出了基于二维信息的物体候选区域筛选方法：利用深度图像进行 $topk$ 的区域分割，再利用颜色数据提取HOG特征后进行SVM分类。在区域分割中又利用像素的深度值来进行相邻像素聚合，以及凸包隶属的策略来进行孔洞填补与杂碎合并，得到 $topk$ 个空间区域主分割；在物体分类阶段，利用预处理阶段训练好的SVM分类器对主分割集中 $topk$ 个区域依次进行判别筛选，最终留下含有物体的区域，并且附上预测标签。在实验中，分别从准确度与计算时间消耗的方面，来选择区域放缩的尺度，以达到简洁高效的二维近距离判别物体类别的目的，快速进入筛选出物体候选以供三维点云进行配准任务。
+	
+	
+\chapter{结合RANSAC与ICP的场景物体点云配准}
+	前一章中，我们已经利用深度信息在二维空间上进行了区域分割，并对场景物体做出归类。本章则要展示对检测出的物体区域进行三维点云配准工作，从而实现物体抓取区域定位。此阶段任务一共分为四步：
+	\begin{enumerate}
+		\item 将二维候选区域点转换成三维点云数据
+		\item 在生成的点云数据上抽取三维空间特征
+		\item 基于抽取的三维空间特征使用点云配准方法使生成点云与预处理阶段的点云模型进行贴合，并输出迁移矩阵
+		\item 根据迁移矩阵，将点云模型上的预定义的抓取点云映射到摄像机的空间坐标中
+	\end{enumerate}
+	此外，在实验中，通过与不同的经典点云配准方法进行比较，以说明本文提出方法在局部点云与整体点云配准时的优势。
+	%1）；2）；3）；4）。
+\section{点云数据生成}
+	 首先，在前章的基础上，我们通过区域分割以及以HOG为特征的分类筛选出了物体候选区域，但是这个区域仅仅是二维的信息。分割分类只是能够判别某个区域含有某个物体，但是并不能确定物体的抓取位置，因为在二维相机呈像时会因视角、光照等原因，往往难以给定启发式的规则来标定物体的可抓取部位。因此需要引入三维信息。三维信息的介入可以较好地弥补视角问题。深度相机虽然能获取物体的颜色信息和深度信息，但这仅仅是2.5D数据，要想转换成三维数据，即点云数据，就需要结合相机参数通过深度信息来生成点云。%生成点云数据的质量和摄像机的质量密切相关。
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[真空相机模型]{
+			\label{SUB Camera Model}
+			\includegraphics[width=0.4\textwidth]{./Picture/Calibration/coordinate1.eps}}
+		\subfigure[主点与焦距]{
+			\label{SUB Principal Point}
+			\includegraphics[width=0.3\textwidth]{./Picture/Calibration/coordinate2.eps}}
+		\subfigure[图片坐标系]{
+			\label{SUB Camera Coordinate}
+			\includegraphics[width=0.234\textwidth]{./Picture/Calibration/coordinate3.eps}}
+		\caption{单目视觉标定}
+		\label{FIG calibration}
+	\end{figure}
+	
+	在阐述生成点云数据之前，需要解释一下相机标定的原理。简单来说，摄像机标定(Camera Calibration)是从世界坐标系换到图像坐标系的过程，也就是求最终的投影矩阵 $P$的过程。相机标定分为单目和双目标定，这里我们只介绍单目标定，以下提到的标定都默认为单目标定。在标定过程中会出现三个基本坐标系：世界坐标系(World Coordinate System)，相机坐标系(Camera Coordinate System)和图像坐标系(Image Coordinate System)。一般来说，标定的过程分为两个部分：1）世界坐标系转换为相机坐标系，是三维点到三维点的转换，需要$R$，$\vec t$组成的外参矩阵（相机外参）；2）相机坐标系转为图像坐标系，是三维点到二维点的转换，需要内参矩阵（相机内参）。
+	
+	图\allowbreak \ref{SUB Camera Model}展示了针孔摄像机的呈像模型，其中$C$是相机的中心点（camera center），$Z$轴是相机的主轴（principal axis），在图片平面（image plane）上的中心点$p$是主轴与呈像平面的交点，即主点；从$X$轴方向观察这个模型就是如图\allowbreak \ref{SUB Principal Point}所示，相机中心点$C$到主点$p$之间的距离就是$f$，俗称焦距）。其中呈像平面上的$x$与$y$坐标轴和相机坐标系上的$X$和$Y$轴是相互平行的，相机坐标系以$X$，$Y$，$Z$三个轴组成的且原点在$C$点，而呈像平面坐标系是以$x$，$y$两个轴组成的且原点在主点$p$处。如图\allowbreak \ref{SUB Camera Coordinate}所示，图像坐标系和呈像平面坐标系在一个平面上，但图像坐标系的原点不在主点处而在图片的角上，与呈像坐标系存在一个$(x_0, y_0)$的偏移。
+	
+	 通过上述简单的相机呈像知识，我们可以开始进行相机标定的两步走。首先第一步是世界坐标系到相机坐标系的转换，世界坐标系其实是人为规定的，在点云生成的过程中，我们完全可以认为世界坐标系和相机坐标系是等价的，也就是说相机的点云数据就是相机自身坐标系下的三维空间。在需要与其他参考物做坐标系迁移时，世界坐标系和相机坐标会不同，这是就需要来确定外参矩阵，比如下一章的相机坐标与机械臂坐标的转换。这样第一步中的世界坐标转换已经是相机坐标了，接下来就是相机坐标到图像坐标的转换。这其中就要涉及相机的内参矩阵。
+	
+	由图\allowbreak \ref{SUB Camera Coordinate}可知，相机坐标中一点$(X, Y, Z)$在呈像平面上对应一点$(x, y)$，可以很容易推出其对应关系为：
+	\begin{equation}
+		x = \frac{f \cdot X}{Z} \quad , \quad y = \frac{f \cdot Y}{Z}
+	\end{equation}
+	又由于，相机坐标$(x, y)$和图像坐标$(u, v)$之间存在一个$(x_0, y_0)$的偏移，故相机坐标系中的$(X, Y, Z)$到图像坐标$(u, v)$的转换关系为：
+	\begin{equation}
+		u = \frac{f \cdot X}{Z} + x_0 \quad , \quad v = \frac{f \cdot Y}{Z} + y_0
+	\end{equation}
+	利用齐次坐标划归成矩阵变换的形式则有：
+	\begin{equation}
+		Z 	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
+			\begin{bmatrix} f & 0 & x_{0}\\  0 & f & y_{0}\\  0 & 0 & 1  \end{bmatrix}
+			\begin{bmatrix} 1 &  &  & 0\\  & 1 &  & 0\\   &  & 1 & 0  \end{bmatrix}
+			\begin{bmatrix} X\\  Y\\  Z\\  1 \end{bmatrix}	
+	\end{equation}
+	由焦距$f$，图像坐标偏移量$(x_0, y_0)$构成的矩阵$K$就是相机的内参矩阵（Intrinsic Parameters），即：
+	\begin{equation}
+		K = \begin{bmatrix} f & 0 & x_{0}\\  0 & f & y_{0}\\  0 & 0 & 1  \end{bmatrix}
+	\end{equation}
+	 但是，还需考虑一点问题：相机坐标系和呈像坐标系的度量单位是距离单位$m$，而图像坐标系是以像素（pixel）的个数为单位的，这里就需要引入一个尺度因子的概念，即单位像素的实际尺寸。由于图像的尺寸往往不是正方形（例如，$1024\times768$的图片横纵尺度因子是不同的），故需引入$dx$和$dy$两个尺度因子分别表示$x$轴和$y$轴的单位像素表征的实际尺寸。因此，内参矩阵$K$需要做一下小修正，成如下形式：
+	\begin{equation}
+	 	K = \begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\ 0 & 0 & 1\end{bmatrix}
+	\end{equation}
+	
+	
+	又因为$Z$与相机中心到该点的距离$z_c$等价，故而根据相机标定的原理，有如下坐标转换公式，
+	\begin{equation}  \label{EQ Calibration Init}
+		z_c	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
+			\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix}
+			\begin{bmatrix} 1 &  &  & 0\\  & 1 &  & 0\\   &  & 1 & 0  \end{bmatrix}
+			\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}
+			\begin{bmatrix} x_{w}\\  y_{w}\\  z_{w}\\  1 \end{bmatrix}
+	\end{equation}
+	其中$u$, $v$为图像坐标系下的任意一点坐标。$f$为相机的焦距，$dx$, $dy$分别为$x$, $y$轴方向的尺度因子，即表示单位像素的实际尺寸。$x_0$, $y_0$分别为图像的中心坐标。$x_w$, $y_w$, $z_w$表示世界坐标系下的三维坐标点。$z_c$表示相机坐标的$Z$轴值，即目标到相机的距离。中间的一个三阶单位矩阵外加全零平移向量组成的$3\times4$的矩阵仅为消除齐次的影响。$R$，$\vec t$分别为外参矩阵的旋转矩阵和平移向量。在生成点云过程中，我们认为世界坐标系就是相机坐标系，那么$R$就是一个$3$阶的单位矩阵，$\vec t$就是一个$3\times1$的全$0$向量，则转换公式\allowbreak \ref{EQ Calibration Init}就可以简化成
+	\begin{equation}  \label{EQ Calibration Simplify}
+		z_c	\begin{bmatrix} u\\  v\\  1 \end{bmatrix} =
+			\begin{bmatrix} f/dx & 0 & x_{0} \\  0 & f/dy & y_{0} \\  0 & 0 & 1 \end{bmatrix}
+			\begin{bmatrix} x_{w}\\  y_{w}\\  z_{w}\end{bmatrix}
+	\end{equation}
+	然后通过矩阵求逆等方式，可以推出$(x_w, y_w, z_w)$的计算方式：
+	\begin{equation} \label{EQ Pointscloud}
+	\left\{\begin{matrix} x_{w}&=& z_{c} \cdot (u-x_{0})\cdot dx/f &\\ y_{w}&=& z_{c}\cdot (v-y_{0})\cdot dy/f &\\ z_{w}&=&z_{c} \quad \qquad \qquad \qquad \qquad  & \end{matrix}\right.
+	\end{equation}
+	
+	一般来说，相机的内参矩阵中的偏移参数$x_0$，$y_0$为相机分辨率的一半（例如相机分辨率是$640 \times 480$，$x_0$和$y_0$的值就分别为$320$和$240$）；焦距$f$和尺度因子$dx$，$dy$可以通过查阅相关型号相机的手册获取，或者如Intel Realsense深度相机可直接提供SDK接口去读取相机内参。但是如果相机型号未知，无法直接从手册获取参数信息时，就需要使用张正友相机标定法\allowbreak \cite{DBLP:journals/pami/Zhang00}来测量相机内参。
+	
+	在确定相机内参之后，求取点云的公式\allowbreak \ref{EQ Pointscloud}就只剩下相机$Z$轴的坐标值。一般的非深度摄像机是无法直接获取像素所离摄像头的距离$z_c$（有相关研究是基于单张RGB图片进行图像深度估计的方法\allowbreak \cite{DBLP:conf/iccv/HoiemSEH07}\allowbreak \cite{DBLP:conf/cvpr/JiaGCC12}，但还是有时还是会和实际距离有明显误差），而深度摄像头却可在此大展神威，轻松获取$(u, v)$像素处的深度值$z_c$，所有的像素组成的图片就构成深度图像，故而根据上述公式\allowbreak \ref{EQ Pointscloud}可以根据上一章对深度图上的二维候选区域$Candidate$中的所有像素点生成该区域的点云数据$PointsCloud$。
+	
+\section{快速点特征直方图}
+	在生成点云数据$PointsCloud$后，我们需要对其抽取三维空间的一种特殊描述子，以便后续过程进行点云配准。在此，我们选取了快速点特征直方图(Fast Point Feature Histograms，FPFH)\allowbreak \cite{DBLP:conf/icra/RusuBB09}作为特征匹配的描述快速点特征直方图是点特征直方图（Point Feature Histograms，PFH）\allowbreak \cite{DBLP:conf/iros/RusuBMB08}的一种近似表示，但是抽取速度较后者有明显提高，同时丢失很少量的空间信息。
+	
+	 为了描述快速点特征直方图（FPFH）就必须明确点特征直方图（PFH）的概念。点特征直方图是基于点与其$k$邻域之间的关系以及其估计法线。简言之，PFH考虑估计法线方向之间所有的相互作用，捕获较好样本表面变化情况，以描述样本的几何特征。因此，合成特征超空间取决于每个点的表面法线估计的质量。图\allowbreak \ref{FIG PFH}(a)所示是在计算PFH时，一个查询点$p_q$ 的影响区域。$p_q$ 用红色标注并放在圆球的中间位置，半径为$r$， $p_q$的所有k邻元素（即与点$p_q$的距离小于半径$r$的所有点）全部互相连接在一个网络中。PFH描述子是计算邻域内所有点对之间关系来统计直方图，需要$O(k^2)$的计算复杂性。
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[PFH的k近邻作用域]{
+		\label{SUB PFH}
+		\includegraphics[width=0.45\textwidth]{./Picture/PFH/pfh_diagram.eps}}
+		\subfigure[FPFH权值模式下的k近邻作用域]{
+		\label{SUB FPFH}
+		\includegraphics[width=0.45\textwidth]{./Picture/PFH/fpfh_diagram.eps}}
+		\subfigure[法线相对差计算]{PFH计算 
+		\includegraphics[width=0.9\textwidth]{./Picture/PFH/pfh_frame.eps}}
+		\caption{点云数据的三维特征表示}
+		\label{FIG PFH}
+	\end{figure}
+	如图\allowbreak \ref{FIG PFH}(c)所示，计算$p_t$和$p_s$两点处法向量$n_t$和$n_s$的相对偏差，需要在一个统一的坐标系中进行，故而我们定义一个达布$uvw$坐标系，其坐标轴计算如下：
+	\begin{equation}
+		\begin{aligned}
+			u & = n_s  \\
+			v & = (p_t-p_s) \times u \\
+			w & = u \times v
+		\end{aligned}
+	\end{equation}
+	在$uvw$的坐标系下，法向量$n_s$与$n_t$的相对差可以用下列三组角来表示：
+	\begin{equation}
+		\begin{aligned}
+			\alpha & = v \centerdot n_t  \\
+			\phi & = u \centerdot \frac{p_t-p_s}{{\left \|p_t-p_s\right \|}} \\
+			\theta & = \arctan(w \centerdot n_t, u \centerdot n_t)
+		\end{aligned}
+	\end{equation}
+	其中，$d =$ ${\left \|p_t-p_s\right \|}_2$ 表示$p_t$与$p_s$之间的欧式距离。计算$k$邻域内各个点对的四组值$(\alpha, \phi, \theta, d)$，这样就把两点及其法向量相关的12个参变量（两点各自的$(x$, $y$, $z)$坐标值和法向量$(n_x$, $n_y$, $n_z)$值）减少到4个。
+	
+	对于欧式距离特征$d$，有实验表明\allowbreak \cite{DBLP:conf/iros/RusuBMB08}，利用$2.5D$的数据上从不同的视角形成的点云计算出的欧式距离作为$d$来验证其作用时，发现除去这个特征后并未对PFH特征区分的鲁棒性产生影响。因此在FPFH的特征计算中将这个进行了剔除，仅将$\alpha$，$\phi$和$\theta$作为特征，并将这个三元组称为简单点特征直方图（SPFH）。
+	
+	FPFH特征描述子的计算复杂度较之FPH降低到了$O(nk)$ ，但仍然保留了\allowbreak PFH大部分的识别特性。下面简要介绍一下，FPFH的特点以及计算过程。
+	
+	对于点云上每一个查询点$p_q$，都能计算出与其相邻点的PFH描述子的四元组值$(\alpha, \phi, \theta, d)$。但现在只需要用到其中的三元组$(\alpha, \phi, \theta)$,这个三元组称为简单点特征直方图（Simple Point Feature Histograms，SPFH）。FPFH特征描述子由以下公式所确定：
+	\begin{equation}
+		FPFH(p_q) = SPFH(p_q) + \frac{1}{k} \sum_{i=1}^k \frac{1}{w_k} \centerdot SPFH(p_k)
+	\end{equation}
+	其中，权值$w_k$表示查询点$p_q$和其某个近邻点$p_k$在给定空间的距离，因而$w_k$的计算可以由多种方式进行，如欧式距离，闵式距离等。
+	从图\allowbreak \ref{SUB FPFH}可以看出FPFH计算的影响域范围：给定查询点$p_q$（图中红色标出），均与$k$个近邻点直连（图中灰色标出），每个直连的近邻点又与其自身的近邻点连接，最终达到调整直方图权重来最终确定FPFH的值。计算FPFH时，先通过$p_q$与其计$k$近邻对来估算SPFH的值，再对点集中的所有点进行SPFH的计算，这样就要使用其近邻点$p_k$的\allowbreak SPFH值来计算$p_q$的FPFH的值。在图\allowbreak \ref{SUB FPFH}中有些值对信息被计算了2次（图中的数字2标记），这可以看出FPFH和PFH的一些区别：
+	\label{TODO------------------FPFH}
+	%内容还需补全一点
+	\begin{enumerate}
+		\item FPFH没有全部连接$p_q$的所有近邻点，可以对于图\allowbreak \ref{SUB PFH}与\allowbreak \ref{SUB FPFH}看出，FPFH丢弃了一些可能捕获$p_q$形态学的值对信息；
+		\item PFH是在$p_q$的附近模拟一个较精确的平面，而FPFH包括了一些超出半径为$r$的球体范围的点（最远到$2r$的距离）;
+		\item 由于重计算权重的机制，FPFH融合了SPFH的值，同时还能重新获取某些近邻点的值对信息;
+		\item FPFH的整体复杂性较之PFH大大降低且仅损失少量信息，FPFH才有可能使用应用在实时或准实时的需求上；
+		\item 如图\allowbreak \ref{FIG FPFH-d}所示，FPFH通过三元组分解，简单生成d分离特征直方图，对每个特征维度单独绘制，并将其连接在一起
+	\end{enumerate}
+	经典的FPFH的实现是统计11个子区间，即对于四个特征值，每个都将其参数区间分割为11个，特征直方图会被分别计算，最后合并成一个33维度的特征向量。
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./Picture/PFH/fpfh_theory.eps}
+		\caption{FPFH中的d维分离直方图}
+		\label{FIG FPFH-d}
+	\end{figure}	
+	
+	\begin{algorithm}[htbp]
+		\caption{\qquad 点云配准}
+		\label{ALG Registration}
+		\begin{algorithmic}[1]
+			\REQUIRE
+			\qquad	\quad 区域点云数据: $Point Cloud$ \\
+			\qquad	\qquad  3D 物体点云数据: $Model_{label}$ \\
+			\qquad  \qquad 最小相似度: $sim$ \\
+			\qquad  \qquad 最大可接受距离: $mad$ \\
+			\qquad  \qquad 最大迭代次数: $mi$ \\
+			\qquad  \qquad 接受比例: $ar$ \\
+			
+			\renewcommand{\algorithmicensure}{\textbf{过程:}}
+			\ENSURE
+			
+			
+			\STATE $R\leftarrow dig(1,1,1)$, $\vec t\leftarrow (0,0,0)^T$
+			\REPEAT % repeat until
+			\STATE $mrs \leftarrow $ Random-Select$(Model_{label})$
+			\STATE $pcrs \leftarrow$ Random-Select$(Point Cloud)$
+			\STATE $similar \leftarrow \{<p1,p2>|Similarity(FPFH_{p1},FPFH_{p2})>sim  \wedge p1 \in mrs \wedge p2 \in pcrs\}$
+			\STATE $R$, $\vec t$ $\leftarrow$ Estimate-TransformMatrix$(similar)$
+			%\STATE $inliers \leftarrow \{p| <p,*> \in $ $similar\}$
+			\STATE $consensus \leftarrow \{p| min (distance(R*p+\vec t,q), q\in Point Cloud) < mad \wedge p \in Model_{label} \}$
+			\UNTIL $\frac{|consensus|}{|Point Cloud|} > ar$ or Reach $mi$
+			\STATE ${Model'}_{label} = R * Model_{label} + \vec t$
+			\STATE $R_{icp}$, $\vec t_{icp} \leftarrow Classic$-$ICP({Model'}_{label}, Point Cloud)$
+			\STATE $R \leftarrow R_{icp} * R$
+			\STATE $\vec t \leftarrow R_{icp} * \vec t + \vec t_{icp}$
+			
+			\renewcommand{\algorithmicensure}{\textbf{输出:}}
+			\ENSURE
+			\qquad \quad	旋转矩阵: $R$\\
+			\qquad \qquad   平移向量: $\vec t$  \\
+		\end{algorithmic}
+	\end{algorithm}
+	
+\section{结合RANSAC与ICP的点云配准}
+
+在分别计算生成点云$PointsCloud$和预测类别对应模型$Model_{label}$的FPFH特征后，需要对两片点云进行配准。由于生成点云是局部点云（也就是实际场景的点云，摄像机只能捕获到物体的某一个面或几个面的信息），预处理阶段建立的三维模型是整体点云，因而配准工作需要进行两步走战略：如算法\allowbreak \ref*{ALG Registration}所示，首先进行粗匹配，利用FPFH的空间性加上随机一致性算法(RANSAC)的策略进行粗匹配，将生成点云和模型中的某几个面匹配上；再利用ICP的逐步迭代特性进行调整，从而达到精确配准。
+
+图\allowbreak \ref{FIG Registration}分别展示配准前，RANSAC，ICP作用后的点云位置变化情况，其中白色的片面点云是从场景中生成的物体区域点云，而绿色的整体点云是预处理阶段物体模型的三维点云。图\allowbreak \ref{SUB before-registration}是物体模型点云与场景中物体区域点云加载到三维空间的状态；图\allowbreak \ref{SUB after-ransac}是在RANSAC算法作用后的结果，可以看出\allowbreak RANSAC使得物体区域点云和物体模型的整体点云中的相应面进行贴合，虽然仍稍有偏差，但大致贴合在一起，实现粗匹配效果；图\allowbreak \ref{SUB after-icp}则是在ICP算法的作用下，进行逐步微调，最终达到收敛，使局部点云与整体点云完全贴合。
+
+	\begin{figure}
+		\centering
+		\subfigure[配准之前]{
+			\label{SUB before-registration}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/before-match.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[RANSAC算法]{
+			\label{SUB after-ransac}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/mid.eps}
+			\end{minipage}
+		}
+		\centering
+		\subfigure[ICP逐步微调]{
+			\label{SUB after-icp}
+			\begin{minipage}[b]{1.8in}
+				\centering
+				\includegraphics[width=1.8in]{./Picture/Example/match.eps}
+			\end{minipage}
+		}
+		\caption {配准各阶段示意图}
+		\label{FIG Registration}
+	\end{figure}
+
+
+\subsection{随机一致性算法}
+
+	随机一致性（Random Sample Consensus，RANSAC）是根据一组包含异常数据的样本数据集，计算出数据的数学模型参数，得到有效样本数据的算法，于1981年由Fischler和Bolles\allowbreak \cite{DBLP:journals/cacm/FischlerB81}最先提出。RANSAC算法经常应用于计算机视觉领域以解决特征点匹配问题，如双目视觉匹配与对齐。
+		
+	 RANSAC算法最早用于统计模型的拟合，其基本假设是样本中包含正确数据(inliers)，也包含异常数据(outliers)，这些异常数据可能是由于错误的测量、错误的假设、错误的计算等产生的。随着RANSAC的逐步发展，现在也假设给定一组正确的数据，存在可以计算出符合这些数据的模型参数的方法。
+	
+	RANSAC与其说是一种算法，不如说是一种策略或者框架，其精髓就在于根据不同需求定义inliers和outliers的辩证关系，从而通过逐步迭代来进行模型匹配。RANSAC的基本思想可以描述成如下步骤：
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[含噪音点的原始数据]{
+			\label{SUB outliers-line}
+			\includegraphics[width=0.45\textwidth]{./Picture/RANSAC/Line_with_outliers.eps}}
+		\subfigure[经过RANSAC拟合的直线]{
+			\label{SUB fitted-line}
+			\includegraphics[width=0.45\textwidth]{./Picture/RANSAC/Fitted_line.eps}}
+		\caption{RANSAC算法可适应含噪音的数据集}
+		\label{FIG RANSAC-EXAMPLE}
+	\end{figure}
+		
+	\begin{enumerate}
+		\item 在数据集合$P$中随机抽取$n$元素组成一个$P$的子集$S$（$|S| < |P|$），利用抽取的子集$S$初始化模型$M$，其中$n$为初始化模型参数所需的最小样本数；
+		
+		\item 集合$S_C$是集合$P$中去除子集$S$后余下的集合，即$S_C = P - S$，抽取的子集$S$以及集合$S_C$与模型$M$的误差小于阈值$\tau$的样本集构成$S^{*}$，$S^{*}$就是所有内点（inliers）的集合，即$S$的一致集合（Consensus Set）；
+		
+		\item 若$|S*| \geq N$，$N$是模型接受度的阈值，即如果内点集合中点数大于等于$N$，则认为是已获取正确的模型参数，并利用集合$S^{*}$中的点重新计算新的模型$M^{*}$；否则，重新随机抽取新的$S$重复以上过程。
+		
+		\item 若迭代$I$次后（$I$为最大迭代次数阈值），依然无法找到一致集合$S^{*}$，则立即停止，算法失败。
+		
+	\end{enumerate}
+	
+	图\allowbreak \ref{FIG RANSAC-EXAMPLE}展示了RANSAC的一个简单应用，\allowbreak \ref{SUB outliers-line}是一些含有噪音点需要进行拟合的数据，图\allowbreak \ref{SUB fitted-line}就是通过RANSAC不断迭代拟合出的一条符合模型的直线，成功避开了噪音点的影响。图\allowbreak \ref{SUB fitted-line}中蓝色点是内点（inliers），红色点是噪音点（outliers）。
+	
+	在局部点云与整体点云的匹配环节，我们也使用RANSAC的策略进行匹配。如算法\allowbreak \ref*{ALG Registration}所示，先分别从点云模型和生成的点云中选取一些点形成$mrs$和$pcrs$点集；之后根据两个点集之间各自点上的FPFH特征进行相似度匹配，相似匹配过程中需要依靠输入阈值$sim$（$0 \leq sim \leq 1$）进行筛选，相似度大于$sim$的就加入相似点对集$similar$，在这里，相似度$Similarity$的计算利用的是余弦距离作为两个点FPFH特征的相似度；接下来，根据上步得到的相似点对集$similar$，只要$similar$中的点对数大于3，就可以进行迁移矩阵的估算（$similar$的数目小于等于3，无法估计，只能输出单位矩阵），估计迁移矩阵的过程是先求解三个轴的旋转角$\theta_x, \theta_y, \theta_z$\allowbreak \cite{DBLP:journals/ijra/RagabW09}后，根据旋转角求解旋转矩阵$R$，之后计算重心位移偏差作为平移向量$\vec t$； 如算法\allowbreak \ref{ALG Registration}中第7步所示，获取估算的旋转矩阵$R$和平移向量$\vec t$后，可将模型点云上的点通过迁移矩阵作用后的点在场景点云中搜索离其最近的点：如果此两点间的距离小于最大接受距离阈值$mad$，则将该点加入一致性集合$consensus$中。\allowbreak \ref{ALG Registration}的第8步就是检验一致性集合$consensus$中点的个数与场景点云$PointCloud$中的点数比率是否超过可接受比率$ar$，或者RANSAC算法已经达到最大迭代次数跳出。若达到可接受比率$ar$，则跳出循环，继续进行下一步ICP算法；若达到最大迭代次数跳出，则说明RANSAC算法失败，则$R$和$\vec t$分别为$3$阶单位矩阵以及$1\times3$的全零向量，之后也将进行ICP算法。可以看出如果RANSAC算法失败后，算法\allowbreak \ref{ALG Registration}将会退化成经典的ICP算法。如图\allowbreak \ref{SUB after-ransac}所示，即为RANSAC算法粗匹配后的效果。
+
+
+	\label{TODO------------------ICP pic}
+	%陷入ICP局部极值，附图说明（对于一些特殊情况 还要附上一些效果较差的图）	
+\subsection{迭代近邻点算法}
+	迭代近邻点算法（Iterative Closest Point，ICP）是一种基于四元数的\allowbreak \cite{horn1987closed}，以点集对点集配准方法为基础的曲面拟合算法，最早由Besl和Mckay\allowbreak \cite{DBLP:journals/pami/BeslM92}于1992年提出。此后经过二十几年的发展，由后人不断完善与补充：
+	
+	Chen和Medioni\allowbreak \cite{chen1992object}以及Bergevin等人\allowbreak \cite{DBLP:journals/pami/BergevinSGL96}先后提出了Point-to-Plane的搜索就近点配准方法；Rusinkiewicz和Levoy\allowbreak \cite{DBLP:conf/3dim/RusinkiewiczL01}提出了Point-to-Projection搜索就近点的快速配准方法；Andrew和Sing\allowbreak \cite{DBLP:journals/ivc/JohnsonK99}在ICP算法基础上加入三维扫描点的纹理色彩信息，提出点纹理信息的配准方法；Park和Subbarao\allowbreak \cite{park2003accurate}在搜索就近点方面又提出了Contractive-Projection-Point的方法；Natasha等人\allowbreak \cite{DBLP:conf/3dim/GelfandRIL03}则重点分析ICP算法中的点云数据配准中的稳定取样的问题。
+	
+	%原理
+	下面简要介绍一下ICP算法的基本原理：
+	假设在三维空间$R^3$中存在两组各含有n个坐标的点集$P_L$和$P_R$，分别为$P_L=\{p_{l1}, p_{l2}, \cdots, p_{ln}| p_{lk} \in R^3\}$，$P_R=\{p_{r1}, p_{r2}, \cdots, p_{rn}| p_{rk} \in R^3\}$。ICP的目标也是将通过空间变换使两个点集中的点进行一一对应，输出旋转矩阵$R$与平移向量$\vec t$，即三维空间点集$P_L$在经过三维空间的旋转平移变换后，与$P_R$中的点一一对应，其点变换式为
+	\begin{equation} \label{EQ trans}
+		\vec {p_{rk}} = R \times \vec {p_{lk}} + \vec t
+	\end{equation}
+	
+	
+	在ICP配准算法中，空间变换参数向量$X$可表示为$X = \left[ q_0, q_x, q_y, q_z, t_x, t_y, t_z \right]^T$。参数向量$X$中四元数参数满足约束条件为：$q_0^2 + q_x^2 + q_y^2 + q_z^2 = 0$。根据迭代的初值$X_0$,由式\allowbreak \ref{EQ trans}可计算出新的点集$P_I$:
+	\begin{equation} \label{EQ iter}
+		P_I = P_0(X_0) = R(X_0)P + \vec t(X_0)
+	\end{equation}
+	其中，$P_I$表示进行第$I$次迭代后的点集，其下标$I$表示迭代的轮数，参数向量$X$的初始值$X_0 = \left[ 1, 0, 0, 0, 0, 0, 0 \right]^T$，$P$则表示初始点集。
+	
+	根据以上的数据处理方法，迭代近邻算法可以分为以下七个步骤：
+	\begin{enumerate}
+		\item 输入两组点集$P_L$与$P_R$，以及迭代差阈值$ \tau$和最大迭代次数$I_{MAX}$
+		\item 根据点集$P_L$中的点$p_{lk}$，在点集$P_R$上搜索其相应的最近点$P_{rk}$；
+		\item 计算两个点集的重心，并进行点集中心化以生成新点集；
+		\item 由新点集可计算出正定矩阵$N$，再分解出$N$的最大特征值及其最大特征向量；
+		\item 由于最小残差平方和的旋转四元数与最大特征向量是等价的，故可将四元数转换为旋转矩阵$R$；
+		\item 估算出旋转矩阵$R$后，平移向量$\vec t$可通过两个点集的重心点的坐标差来确定；
+		\item 根据式\allowbreak \ref{EQ iter}，将点集$P_{lk}$进行旋转平移后，得到点集$P'_{lk}$。记点集$P_{lk}$与$P'_{lk}$计算累加距离差值为$f_{k+1}$，以两次累加距离差的绝对值$\Delta f = |f_{k+1} - f_{k}|$作为迭代判断数值；
+		\item 当$\Delta f < \tau$ 或者迭代次数大于$I_{MAX}$时，停止迭代，输出旋转矩阵$R$与平移向量$\vec t$；否则重复2至7步。
+	\end{enumerate}
+
+	%应用
+	在本文中，ICP算法主要作为粗匹配之后的逐步迭代微调的过程。在算法\allowbreak \ref{ALG Registration}中的第11步应用经典的ICP算法\allowbreak \cite{DBLP:journals/pami/BeslM92}做微调，具体原理细节已在上一章阐明。需要注意的是，在该进行该步骤前，输入不是原始$Model_{label}$，而是经过粗匹配后的${Model'}_{label}$的位置，因而需要利用粗匹配中的RANSAC得到的旋转矩阵$R$与平移向量$\vec t$进行变换，该变换是针对$Model_{label}$中的所有点进行的，得到了一个旋转平移过后的点集${Model'}_{label}$，该点集即为粗匹配后的位置。ICP算法就是将粗匹配的结果${Model'}_{label}$与场景中的区域点云数据$PointCloud$做微调。其中，在算法\allowbreak \ref{ALG Registration}的第11行中，ICP算法的最大迭代次数$I_{MAX}$在这一步中设为100，迭代差阈值$\tau$设为$10^{-9}$。最终输出ICP算法的旋转矩阵$R_{icp}$与平移向量$\vec t_{icp}$。
+	
+	在算法\allowbreak \ref{ALG Registration}的最末两个步骤（12-13行）则根据ICP的结果，将旋转矩阵和平移向量进行微调，得到最终的配准结果。通过旋转矩阵$R$和平移向量$\vec t$可以轻松地将该模型$Model_{label}$上的预标定的抓取区域经过空间变换后，放在深度相机的点云空间中。如图\allowbreak \ref{SUB after-icp}所示，即为ICP算法微调后的效果，实现局部点云与整体点云的贴合。
+
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[地面实况]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/groundtruth.eps}
+			\end{minipage}
+		}
+		\subfigure[瓶子(bottle)]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/bottle-res.eps}
+			\end{minipage}
+		}
+		\subfigure[杯子(cup)]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/cup-res.eps}
+			\end{minipage}
+		}
+		\subfigure[罐子(can)]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/can-res.eps}
+			\end{minipage}
+		}
+		\subfigure[茶壶(teapot)]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/teapot-res.eps}
+			\end{minipage}
+		}
+		\subfigure[盒子(box)]{
+			\begin{minipage}[b]{1.8in}
+				\includegraphics[width=1.8in]{./Picture/Example/box-res.eps}
+			\end{minipage}
+		}
+		\caption{地面实况（Groundtruth）与配准结果}
+		\label{FIG ResultShow}
+	\end{figure}
+	
+\section{实验结果}
+	为了验证配准算法的有效性，我们采集了五类常见的桌面级物体作为候选配准物体集，然后对其进行 3D 模型的扫描以及利用上一章所训练的SVM物体分类模型进行物体的分类工作。
+
+	此部分的数据集是利用深度相机 Intel Realsense F200 进行采集彩色图和其相应的深度图，每个类大约都300张，背景的杂类1500张左右。其中2D的彩色图像在前一章中人工标定过物体所在区域，由于该实验只要为了测试物体区域的配准情况，故直接拿来训练物体区域的分类器（训练集即为测试集），这样在进行配准前基本可确定物体区域是正确的。因为配准工作是基于物体分类的结果，一旦物体分类出错则配准肯定会出问题，所以在物体分类正确的前提下，我们进行三维模型配准的实验。
+	
+	如图\allowbreak \ref{FIG ResultShow}(a)所示，在识别出瓶子的所在区域后，进行配准后，蓝色的矩形框为本文提出方法的预测区域的包围框，而红色的矩形框就是在进行算法之前根据领域知识，人工对物体标定可抓取区域作为地面实况（Groundtruth）。图\allowbreak \ref{FIG ResultShow}(b)$\sim$(f)分别是瓶子（bottle）、杯子（cup）、罐子（can）、茶壶（teapot）和盒子（box）的配准结果，其中紫色点群是物体模型在2D图像上的映射，黄色点群是模型上预定义的抓取区域在2D图像上的映射，蓝色的矩形框就是能包住黄色点群的最小包围框（boundbox）。蓝色矩形框就是本文算法给出的结果。
+	
+	\begin{figure}[htbp]
+		\includegraphics[width=\textwidth] {./Picture/Evaluation/Jaccard.eps}
+		\caption{评价标准-Jaccard相似度}
+		\label{FIG Evaluation}
+	\end{figure}
+
+	本实验评价标准采用Jaccard相似度来验证地面实况的红色矩形框与预测的蓝色矩形框的交合情况。其中，Jaccard相似度的定义如下：
+	\begin{equation}
+		J = \frac{|P \bigcap G|}{|P \bigcup G|}
+	\end{equation}
+	其中$P$是算法预测出的矩形区域，$G$是地面实况标定的区域，$P \bigcap G$表示矩形$P$与$G$的相交部分的矩形，而$P \bigcup G$表示$P$与$G$的并合起来的大矩形，$|X|$则表示矩形$X$的面积。如图\allowbreak \ref{FIG Evaluation}所示，中间蓝色的矩形区域就是$P \bigcap G$，$P \bigcup G$则是图中的最大的黑框矩形。Jaccard相似度就是蓝色矩形与黑框矩形的面积之比。
+		%还需要做一个PR曲线图
+		\label{TODO------------------PR curve}
+		%数据集表和结果表分开
+		
+		
+		% 配准效果表
+		\begin{table}[htbp]
+			\centering
+			\caption{提出方法与其他基于ICP方法的比较}
+			\begin{tabular}{lcccc}
+				\toprule
+				\multicolumn{1}{c}{类别}    & \multicolumn{1}{l}{提出的方法} & \multicolumn{1}{l}{经典ICP\cite{DBLP:journals/pami/BeslM92}} & \multicolumn{1}{l}{带法线ICP\cite{DBLP:conf/3dim/RusinkiewiczL01}} & \multicolumn{1}{l}{非线性ICP\cite{DBLP:journals/pami/BergevinSGL96}}			 \\
+				\midrule
+				瓶子(bottle)   & 0.657 & 0.309 & 0.307 & 0.316			 \\
+				%\midrule
+				盒子(box)    & 0.619 & 0.225 & 0.241 & 0.289			 \\
+				%\midrule
+				罐子(can)    & 0.597 & 0.445 & 0.372 & 0.329			 \\
+				%\midrule
+				茶杯(cup)     & 0.695 & 0.042 & 0.132 & 0.177			 \\
+				%\midrule
+				茶壶(teapot)    & 0.658 & 0.165 & 0.237 & 0.215			 \\
+				\bottomrule
+			\end{tabular}%
+			\label{TAB RegistrationCompare}%
+		\end{table}%
+
+	实验是在五个类上测试，表\allowbreak \ref{TAB RegistrationCompare}中的数值是该类的平均Jaccard相似度，这里的平均就是直接取平均数，最终得出结果。
+	从表\allowbreak \ref{TAB RegistrationCompare}可以看出，本文提出的\allowbreak RANSAC+ICP的点云配准方法在于其他纯基于迭代近邻点的方法有明显的提高，说明能一定程度上解决局部点云与整体点云的配准问题，从而规避了ICP-based等方法的弱势，在准确度上可以属于供参考候选的方法；同时该方法消耗的时间很少，且无须借助GPU等硬件，仅在Intel(R) Core(M) i3-2130 CPU@3.40\allowbreak GHz处理器下在2s内能预测出物体的抓取位置。可以胜任准实时的任务。本文提出的点云配准的定位抓取法虽然在预处理部分略显繁琐，但在实际应用中是一种具有较高精确度且价格低廉（仅需深度摄像机和普通的PC机即可）的解决方案。
+	
+\section{本章小结}
+	本章提出了一种基于刚体的局部点云与整体点云的配准方法，先利用\allowbreak RAN-SAC 算法进行粗匹配后，将局部点云与整体点云相应的面粗略匹配上，再利用ICP的特性可以进行逐步微调，从而达到精确配准。之后简单通过相机的坐标转换将点云坐标转换为二维坐标，从而实现物体抓取区域定位任务。实验中，我们使用Jaccard相似度衡量匹配的准确度，实验结果也表明本文提出的方法具有较好的抓取定位效果。
+
+
+\chapter{基于深度相机的机械臂实物抓取系统实现}
+	\section{算法框架}
+	 虽然机器人领域如火如荼地发展，目前机器人研究已经取得相当优异的成果，机器人自动抓取方法也层出不穷，但是离真正的智能机器人普通家庭民用化还是有一定距离。在自动抓取任务中，物体抓取的准确度、时间效率和价格成本天生就是一组矛盾体。
+	
+	 基于物体抓取区域定位的研究现状，我们致力于开发一种廉价高效且准确度可接受的抓取区域定位抓取系统。本文提出一种基于深度相机，以区域分割、物体分类和点云配准为基础的物体抓取区域定位算法。其主要思想是，基于深度摄像机采集RGB-D数据，通过纯RGB数据（即二维数据）来检测出物体的所在区域以及物体所属的类别，之后再通过生成点云与点云模型进行匹配后确定物体的可抓取区域。因此，我们需要先对预抓物体进行 3D 点云模型建立（可以通过扫描或软件模拟的方式），之后根据我们对物体可抓区域的认知，在物体的 3D 点云模型上标记处物体的可抓取区域，即在模型上标记可抓取区域的点云数据；同时还需要一个能在二维上判别物体类别的分类器。进行这两步预处理后，就可以利用深度摄像机采集场景的RGB-D数据进行物体抓取区域定位算法，依次经过区域分割，物体分类，点云配准以及空间坐标映射等步骤确定可抓取区域。物体抓取区域定位算法的整体框架如图\allowbreak \ref{FIG Flow}所示。
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=\textwidth] {./Picture/Example/flow-cn.eps}
+		\caption{物体抓取区域定位算法整体框架}
+		\label{FIG Flow}
+	\end{figure}
+	
+	\subsection{预处理阶段}
+	在进行物体抓取区域定位算法前，需要进行两个预处理步骤：训练物体分类器和物体 3D 建模。其中，物体分类器是利通过抽取二维特征以及线性分类器进行分类，而物体 3D 建模则需要通过  3D  扫描仪或一些软件创建模型，如 3DMAX，本文中采用3D扫描仪的方式进行点云模型建立。
+	
+	\subsubsection{物体分类器训练}
+	物体分类器的训练是采集场景图片中的预定义物体，抽取HOG特征后训练一个SVM判别器作为$n$类物体的分类器。其中，第$1 \sim n$类物体表示物体相对应的标签，第$0$类物体则表示背景类，即不属于任何一个物体类别。每个物体的训练样本需要人工从不同角度采集场景图片后，标出所处位置框并对其打上相应的label（属于哪类物体）；同时背景类需要随机地在非标定框区域随机采集不同大小的样例。最终形成训练集后，再放入线性核的SVM分类器中进行训练。
+	
+	如图\allowbreak \ref{FIG Dataset}所示，每一行均为从不同角度采集的某一类物体，然后从这些图中抠出物体区域作为训练集进行训练。
+	
+	\begin{figure}[htpb]
+		\centering
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(1).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(2).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(3).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(4).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(5).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/bottle/bottle(6).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(1).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(2).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(3).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(4).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(5).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/box/box(6).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(1).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(2).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(3).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(4).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(5).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/can/can(6).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(1).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(2).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(3).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(4).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(5).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/cup/cup(6).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(1).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(2).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(3).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(4).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(5).eps} }
+		\end{minipage}
+		\begin{minipage}[b]{0.16\textwidth}
+			\centerline{ \includegraphics[width=\textwidth, height=0.75\textwidth]{./Picture/Dataset/teapot/teapot(6).eps} }
+		\end{minipage}
+		\caption{采集到的数据集}
+		\label{FIG Dataset}
+	\end{figure}
+	
+	
+	\subsubsection{物体 3D 建模}
+	事实上，物体 3D 模型建立可以有多种方式，但本文中选择使用直接使用 3D 扫描仪建立物体的点云模型。此步骤具体细节与本文无太大关系，因而略去。在获取物体的点云模型之后，我们需要对物体本身的可抓取区域认知，人为地标记物体模型上可抓取的区域。如图\allowbreak \ref{FIG Models}所示，第一行即为五类物体通过扫描仪获得的点云数据模型，第二行中物体上的红色区域则是在物体上人为标定的可抓区域。
+	\begin{figure}[htpb]
+		\centering{
+			\includegraphics[width=\textwidth, height=1.35in]{./Picture/Example/models.eps}	
+		}
+		\centering
+		\begin{minipage}[b]{1.1in}
+			\centerline{\includegraphics[width=1.02\textwidth, height=1.05in]{./Picture/Example/cup.eps}}
+			\centerline{\small{1: 茶杯(cup)}}
+		\end{minipage}
+		\begin{minipage}[b]{1.11in}
+			\centerline{\includegraphics[width=1.05\textwidth, height=1.05in]{./Picture/Example/can.eps}}
+			\centerline{\small{2: 罐子(can)}}
+		\end{minipage}
+		\begin{minipage}[b]{1.11in}
+			\centerline{\includegraphics[width=1.05\textwidth, height=1.05in]{./Picture/Example/pot.eps}}
+			\centerline{\small{3: 茶壶(teapot)}}
+		\end{minipage}
+		\begin{minipage}[b]{1.11in}
+			\centerline{\includegraphics[width=1.05\textwidth, height=1.05in]{./Picture/Example/box.eps}}
+			\centerline{\small{4: 盒子(box)}}
+		\end{minipage}
+		\begin{minipage}[b]{1.12in}
+			\centerline{\includegraphics[width=1.055\textwidth, height=1.05in]{./Picture/Example/bottle.eps}}
+			\centerline{\small{5: 瓶子(bottle)}}
+		\end{minipage}
+		\caption{在 3D 点云模型上标记抓取区域位置}
+		\label{FIG Models}
+	\end{figure}
+	\subsection{抓取定位阶段}
+	 在完成了上述预处理阶段之后，我们就可以通过深度相机实时获取RGB-D数据后进行物体的抓取区域定位。抓取定位阶段主要分为四个阶段：区域分割，物体分类，点云配准与坐标映射。其中，输入数据是RGB-D数据，最终输出图片中物体的可抓取位置。
+	
+	\subsubsection{区域分割}
+	 当输入RGB-D数据，我们首先需要去二维图片的空间进行分割，我们仅在深度信息上基于区域增长算法，可以获取两个集合，一个是不同深度区域的集合，另一个是全黑区域的集合。不同深度的区域是指在深度图像上利用区域增长算法会将图片按照不同深度分割成不同区域，每个区域中距离都是相近，也就是说每次区域增长的扩展规则是按邻近点距离在某阈值范围内就扩展的规则；全黑区域即不确定区域，由于深度相机本身的限定，过远或过近的距离，深度信息都无法获取；同时由于一些物体表面材质的问题会产生强烈的漫反射，这种情况下同样无法获取深度信息。对于不可获取点的区域在图像上的显示就是全黑部分。
+	
+	之后，通过挑选有代表性的一些深度区域，称之为主区域集合，将其他区域中被主区域凸包所包含的点进行合并，最终输出一个主区域集合。
+	
+	\subsubsection{物体分类}
+	 区域分割后获取了主区域集合，对于这个主区域集合中的每个区域都需要进行物体的类别判断。判断的依据就是依靠预处理阶段训练生成的物体分类器：若该区域中有物体则分类器会相应地输出预测的物体标签；若区域不包含物体，则分类器输出$0$，表示该区域属于背景类。因此，主区域集合通过分类器的筛选后，剩下的就是含有物体的区域集合，这个集合内每个区域都有相应的物体类别标签，同时我们也将这个区域集合记作，候选区域集（一般而言，候选区域集里只有一个区域，也就是说一个场景图片里只含有一个物体）
+	
+	\subsubsection{点云配准}
+	 对于候选区域集，对每个候选区域生成点云模型，然后根据候选区域预测的类别标签加载对应的预扫描三维点云模型。在生成点云与点云模型之间利用点云配准的方法进行配准。由于该配准任务属于局部点云与整体点云配准问题，基于ICP等经典算法效果不是很好，因此我们采用了RANSAC与ICP结合的方式进行配准：先依靠RANSAC进行粗匹配，将局部点云与点云模型相应面配对上，之后再依靠ICP进行局部微调，从而得出点云配准的变换矩阵。
+	
+	\subsubsection{坐标映射}
+	 得到变换矩阵后，我们将预定义的抓取位置通过变换矩阵转换可以得到抓取位置在实际点云空间的位置信息（即以摄像机焦点为原点的坐标系的位置）。%在实验中，我们转换到二维坐标，目的是为了利用Jaccard相似度来检验算法的准确度，
+	在实际抓取应用中，需要将此坐标与机械臂的坐标进行转换，转换的过程需要利用棋盘标定将相机坐标与机械臂坐标做迁移矩阵估计。
+	
+	%\section{本章小结}
+	%本章介绍了基于深度相机的场景物体抓取区域定位的总体算法框架：该算法需要进行物体分类器训练以及 3D 模型建立这两步与处理工作；在确定可抓区域时，需要经过区域分割，物体分类，点云配准和坐标转换，最终获取物体的可抓区域，以指导机械臂进行抓取。
+	\section{软硬件实施}
+	实物抓取系统硬件配置由一台桌面级机械臂，一个深度摄像头和一台普通PC机构成，其中本实验采用的设备清单如下:
+	\begin{table}[htbp]
+		\centering
+		\caption{抓取系统所使用的器材}
+		\begin{tabular}{ll}
+			\toprule
+			\multicolumn{1}{c}{设备名}   & \multicolumn{1}{c}{产品型号} \\
+			\midrule
+			处理器   & Intel(R) Core(M) i3-2130 CPU@3.40GHz\allowbreak \cite{Intel-Core-i3}\\
+			深度相机  & Intel Realsense F200\allowbreak \cite{IntelRealsenseF200} \\
+			机械臂   & Dobot Magician \allowbreak \cite{DobotMagician}\\
+			\bottomrule
+		\end{tabular}%
+		\label{TAB DeviceList}%
+	\end{table}%
+	
+	软件实现部分还需要借助一些额外的开源库或相关设备公司开发的SDK，具体清单如下：
+	\begin{table}[htbp]
+		\centering
+		\caption{抓取系统所需依赖库}
+		\begin{tabular}{ll}
+			\toprule
+			\multicolumn{1}{c}{软件库}    & \multicolumn{1}{c}{功能} \\
+			\midrule
+			DobotDll & 上位机驱动机器臂运行的接口 \\
+			Intel Realsense SDK  & 提供读取深度图片、点云数据等函数 \\
+			OpenCV & 提供物体分割与识别所需函数 \\
+			Point Cloud Library & 提供基础点云读写与配准函数 \\
+			\bottomrule
+		\end{tabular}%
+		\label{TAB Dependence}%
+	\end{table}%
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[Intel Realsense F200]{
+			\label{SUB F200}
+			\includegraphics[width=0.47\textwidth]{./Picture/ARM/f200.eps}}
+		\subfigure[Dobot Magician]{
+			\label{SUB DOBOT}
+			\includegraphics[width=0.43\textwidth]{./Picture/ARM/dobot.eps}}
+		\label{FIG DEVICE}
+		\caption{深度相机与机械臂}
+	\end{figure}
+	
+	
+	其中，Intel Realsense F200与Dobot Magician分别是Intel公司和越疆科技制造的智能硬件。Intel Realsense F200如图\allowbreak \ref{SUB F200}所示，是一款以毫米为深度单位，捕获近距离深度的摄像头（可测深度范围为$20mm \sim 1200mm$），且体型精巧，功耗低\allowbreak \cite{DBLP:conf/icip/DraelosQBS15}，无须额外电源，PC端的USB3.0接口直接可以供电驱使其工作；而图\allowbreak \ref{SUB DOBOT}是Dobot Magician的产品图，Dobot Magician则是一款多功能桌面级机械臂，支持物体抓取，模拟写字以及 3D 打印\allowbreak \cite{DBLP:journals/ijis/ChenL17}等诸多功能。
+	
+	Intel Realsense SDK和DobotDll分别是相应公司开发的驱动硬件的工作的软件开发接口。OpenCV\allowbreak \cite{DBLP:books/daglib/0021695}是由Intel公司主导的计算机视觉领域的知名开源库，已在广泛硬件上有相应的版本。OpenCV中含有大量的图像处理，视觉算法以及机器学习的库函数；本系统中二维图像上的分割与分类任务就是在OpenCV库函数的基础上实现。Point Cloud Library(PCL)\allowbreak \cite{DBLP:conf/icra/RusuC11}也同样是在点云数据领域具有扛鼎地位的开源软件库，本身集成了大量的点云相关的特征描述子和基础算法；本系统的点云配准算法就是依赖PCL的基础库所实现的。
+	
+	
+	部署好系统所需的软硬件环境后，需要确定机械臂的坐标以及标定摄像机坐标与机械臂坐标进行转换，之后设定好抓取参数，就可以实施抓取实践。本章接下来篇幅详细介绍实际抓取的相关设定以及演示抓取测试效果。
+	
+	\section{坐标变换}
+	 在进行抓取测试之前，先要确定摄像机坐标系和机械臂坐标的相关关系。其实利用的原理就是空间同名点对应法，空间同名点是指两个不同坐标系下的点对应的是空间中相同的一点。但是机械臂和相机坐标系的同名点本身上不易寻找的，故需借助棋盘作为中介来确定空间同名点。首先，机械臂通过棋盘的坐标点来确定自身位置的平移关系，然后借助棋盘来确定机械臂和摄像机两者间的关系，通过找出棋盘上黑白相间的角点作为同名点来估算机械臂与摄像机坐标系的旋转平移关系，即相机外参矩阵的标定。
+	
+	\subsection{棋盘坐标}
+	如图\allowbreak \ref{FIG Chessboard}所示，我们制作了一张实际边长为$71mm$的棋盘，其中我们以毫米为单位，因为深度相机也是以毫米为单位。定义内圈的$4 \times 4$的定点为$(0, 0)$，16个点的坐标分别依次如图\allowbreak \ref{FIG Chessboard}排列。稍后会解释为何坐标原点要从内圈的$4 \times 4$点中开始。至此就完成了棋盘坐标的确定，棋盘上的内圈角点就是空间的同名点，机械臂和相机坐标之后都需要以其为准。
+	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\textwidth] {./Picture/ARM/chessboard.eps}
+		\caption{实际边长为71mm的$5 \times 5$棋盘}
+		\label{FIG Chessboard}
+	\end{figure}
+	
+	\subsection{机械臂坐标}
+	机械臂Dobot Magician是一个具有四个关节自由度的机械臂，自身以底座原点为坐标原点的坐标系，同时有自带的Dobot Studio控制软件，有坐标和关节两种模式进行驱动。如图\allowbreak \ref{SUB Studio}所示，关节1$\sim$3分别能驱动机械臂在三维空间上的运动，关节4是机械臂的转头旋转控制l；同时也有坐标模式可以轻松地根据输入坐标移动。我们按照\allowbreak \ref{SUB InitPoint}所示将机械臂头移动到坐标原点后，记录下机械臂本身的坐标$X_0,Y_0,Z_0$，则这个坐标就是机械臂与棋盘坐标的原点偏移值。由于机械臂与棋盘之间不存在旋转关系，故机械臂与棋盘间只需简单的平移，即有如下关系：
+	\begin{equation} \label{EQ Arm2Chess}
+		(X_A, Y_A, Z_A) = (X_C, Y_C, Z_C) + (X_0, Y_0, Z_0)
+	\end{equation}
+	其中$(X_A, Y_A, Z_A)$表示机械臂的坐标，$(X_C, Y_C, Z_C)$是棋盘坐标，$(X_0, Y_0, Z_0)$则是各自轴方向的偏移值。
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[Dobot Studio 控制机械臂坐标]{
+			\label{SUB Studio}
+			\includegraphics[width=0.465\textwidth]{./Picture/ARM/Studio.eps}}
+		\subfigure[机械臂移动至原点]{
+			\label{SUB InitPoint}
+			\includegraphics[width=0.44\textwidth]{./Picture/ARM/InitPoint.eps}}
+		\label{FIG ARM}
+		\caption{确定机械臂原点坐标}
+	\end{figure}
+	
+	\subsection{相机坐标}
+	%findChessBoard和SolvePnP原理还需略加阐述
+	\label{TODO-----------------Camera}
+	通过OpenCV的findchessboard函数可以找出黑白棋盘中的交界点，其原理就是通过角点检测\allowbreak \cite{DBLP:conf/icip/PeiD07}之后过滤不相干点最后留下具有空间逻辑关系的一组点，这组点就是我们需要的棋盘点。也正因如此，棋盘往往使用内圈点，因为外围点较难定位（有诸多干扰）。如图\allowbreak \ref{FIG Corner}所示，每个带圆圈的点就是检测出的$5 \times 5$棋盘角上的16个交界点，其中红色的一排所在处就是第一行点的坐标，之间的连线关系就是二维空间点存储的对应关系，只需按位复原与棋盘的坐标一一对应即可。
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\textwidth] {./Picture/ARM/corner.eps}
+		\caption{通过OpenCV找到棋盘上的交接点}
+		\label{FIG Corner}
+	\end{figure}
+	
+	由上一章公式\allowbreak \ref{EQ Calibration Init}以及\allowbreak \ref{EQ Calibration Simplify}可知，我们在计算相机的点云空间坐标时是忽略相机的外参旋转矩阵$R$和平移向量$\vec t$的，点云空间中的世界坐标系和相机坐标系是统一的。但在这里要与机械臂做坐标转换时，就需要将棋盘上的点作为世界坐标系。于是我们得到如下关系：
+	\begin{equation}  \label{EQ PointsCloud}
+		\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} =
+		\begin{bmatrix} X_{C}\\  Y_{C}\\  Z_{C}\\  1 \end{bmatrix}
+	\end{equation}
+	根据OpenCV的solvePnP函数可以求解空间同名点对应关系，其原理是当同名点对数大于3时，解一个12未知量的方程组的近似解。一般而言，同名点对数越多，求解的精度越高。
+	
+	估算出旋转矩阵$R$和平移向量$\vec t$后，由公式\allowbreak \ref{EQ Arm2Chess}可知，摄像机坐标与棋盘坐标有偏移量关系：
+	\begin{equation}
+		\begin{bmatrix} X_P\\  Y_P\\  Z_P \\ 1 \end{bmatrix}		\begin{bmatrix} R & t\\ 0 & 1 \end{bmatrix}^{-1} +
+		\begin{bmatrix} X_{0}\\  Y_{0}\\  Z_{0}\\  1 \end{bmatrix} =
+		\begin{bmatrix} X_{A}\\  Y_{A}\\  Z_{A}\\  1 \end{bmatrix}
+	\end{equation}
+	$(X_P, Y_P, Z_P)$的计算可由公式\allowbreak \ref{EQ Pointscloud}计算得出，最终完成摄像机上任意一点有深度信息的像素坐标到机械臂坐标系的转换。
+	
+	
+	经过我们的误差检验，此标定方法的误差基本在$8mm\times8mm\times8mm$范围内，而Dobot Magician本身的抓取口径约$3cm$，是在误差可接受范围内。可以进行桌面级物体的抓取。
+	
+\section{抓取实践测试}
+	由于Dobot Magician的抓取头部无法进行$360$度的旋转，只能垂直方向抓取，故我们采用常见的纸杯作为桌面抓取的效果演示，所用纸杯如图\allowbreak \ref{SUB Papercup}所示。如图\allowbreak \ref{SUB InitPoint}，根据前一节所使用的方法定位机械臂的原点位置为$(147.20, 6.79, -28.03)$。同样在进行抓取之前，我们对纸杯进行预处理操作：采集了二维从颜色数据集训练分类器$Classifier$，使用 3D 扫描仪，对其进行建模，生成 3D 点云模型$Model$，同时标注水杯的杯口区域的一圈点云作为模型的抓取区域$Grasp$。标定摄像机和机械臂坐标后，对于分割和配准算法设定参数：分割算法中的${topk}$ 设定为$6$；配准算法中，设定最小相似度$sim$为$0.88$，最大可接受距离$mad$为$2.5$，最大迭代次数$mi$为$10000$，接受比例$ar$为$20\%$。
+	
+	\begin{figure}[htpb]
+		\centering
+		\subfigure[演示物体——纸杯]{
+			\label{SUB Papercup}
+			\includegraphics[width=0.21\textwidth]{./Picture/ARM/papercup.eps}}
+		\subfigure[抓取之前状态]{
+			\label{SUB before}
+			\includegraphics[width=0.323\textwidth]{./Picture/ARM/before.eps}}
+		\subfigure[抓取之后状态]{
+			\label{SUB success}
+			\includegraphics[width=0.31\textwidth]{./Picture/ARM/success.eps}}
+		\caption{实体抓取演示效果}
+		\label{FIG Test Papercup}
+	\end{figure}
+	
+	 在抓取实践中，我们选取预测区域中附着在模型上的一片点云中的任意点进行抓取。因为模型贴合后，杯口的任意一点都可作为抓取的候选点，然后通过三维坐标转换驱动机械臂移动到相应位置。进行抓取测试时，每次检测到水杯位置后大概$2$秒，系统就会做出反应驱动机械臂移动至相应位置对水杯进行抓取，抓到水杯之后机械臂会向上提高一段距离以示抓取成功。如图\allowbreak \ref{FIG Test Papercup}所示，\allowbreak \ref{SUB before}是实施抓取之前的状态，\allowbreak \ref{SUB success}则是机械臂抓取成功的状态。	
+	
+\section{本章小结}
+	本章主要介绍了实物抓取系统的相关软硬件环境配置，标定相机和机械臂坐标的方法以及具体定位算法的参数设置。最后，以常见的纸杯作为演示物体，以抓水杯的杯沿部分给出抓取的演示效果。
+	
+	
+\chapter{总结与展望}
+
+	\section{本文成果}
+	 本文提出了一种全新的机械臂抓取算法模型，利用预先扫描候选物体并标注抓取部位，同时基于深度摄像机通过深度信息与颜色数据检测分类，结合RANSAC与ICP的三维点云配准方法进行实时定位物体的可抓取位置。本文所提方法可概括为以下三个主要步骤：
+	
+	\begin{enumerate}
+		\item 通过深度相机采集的深度信息进行二维图像的区域分割获取候选区域；
+		\item 针对对每个候选区域的颜色数据依次提取HOG特征，并且利用预先训练的SVM分类器将物体进行快速分类；
+		\item 通过深度信息生成候选区域的点云数据，并结合RANSAC与ICP的点云配准与预先扫描的三维模型进行匹配，有效解决局部点云与整体点云的配准问题
+	\end{enumerate}
+	
+	 实验中，我们利用10-折交叉验证在五类不同的常见桌面级物体的数据集上，对HOG+SVM进行物体区域分类方法的可靠性进行了验证，准确度基本都在90\%以上；之后对这五种常见桌面级物体进行抓取区域定位测试，利用Jaccard相似度作为评价标准，并与一些基于ICP的点云配准方法进行比较，结果显示我们的方法具有在局部与整体点云的配准上有优势，并且Jaccard相似度基本都大于0.6。
+	
+	同时本文实现了一套基于深度相机的场景物体定位与抓取系统，该系统计算资源消耗不大\allowbreak（无需任何GPU）且效率较高，利用纸杯作为模型演示，仅在Intel(R) Core(M) i3-2130 CPU@3.40GHz处理器下可以在2s内预测出抓取位置。综上所述，通过二维分类，三维配准的方式是一种行之有效的物体抓取部位定位算法。
+	
+	\section{不足与展望}
+	本文针对物体抓取区域定位做了一定的研究，并提出了相关算法，但提出的方法仍然有以下三方面的不足：
+	\begin{enumerate}
+		
+		\item 预处理过程的两个部分比较繁杂，需要先采集二维图片的样例，以及对物体本身建模，从这点来说是需要消耗较多人力资源
+		
+		\item 可扩展性稍弱，由于第一点中提到的预处理繁琐，因此每增加一个物体都需要再进行如此操作
+		
+		\item 抓取本身的精度有待加强，对于较为细小的物体，如粉笔，基于点云配准的方法就有点力不从心
+	\end{enumerate}
+	
+	未来我们将继续研究新的有效的算法来实现物体抓取区域定位，提高定位精度，同时注重算法的效率。在二维检测的基础上，抽取出三维信息后如何利用原有的模型进行信息推断将会是本文进一步研究的目标。
+	
+	进一步的研究可以从两方面考虑：
+	\begin{enumerate}
+		\item 三维方向，相似三维模型的抓取区域自推断，就是说扫描一种物体后，和其类似的物体能够从原始的三维信息推断上进行三维模型上的抓取区域推断；
+		\item 纯二维方向，二维图片的大类归类，利用深度学习方法，对某一类大类，比如书本，能够进行识别，在大类分类之后，能否再使用类似细粒度分析的手段来对该物体进行信息推断，推断的依据就是之前给神经网络训练大量数据，然后对从未见过的物体也能给出可抓区域的推测解。（本文方法的一大软肋就是未知物体不可抓）
+	\end{enumerate}
+%	% 附录
+%	\appendix
+%	
+%	\chapter{博士(硕士)学位论文编写格式规定(试行)}
+	
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%% 附件部分
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\backmatter
+	
+	% 参考文献
+	% 使用 BibTeX，不使用 BibTeX 时注释掉下面一句。
+	\bibliographystyle{NJUthesis}	
+	%\bibliography{feature}
+	\bibliography{Reference}
+
+	
+	
+	\Nchapter{简历与科研成果}
+	
+	\noindent {\heiti 基本情况}
+	\vspace{1ex}
+	
+	\noindent 周逸徉，男，汉族，1991~年~10~月生，江苏常州人。
+	
+	\vspace{2ex}
+	\noindent {\heiti 教育背景}
+	
+	\begin{description}[labelindent=0em, leftmargin=8em, style=sameline]
+		
+		\item[2014.9～2017.6] 南京大学软件新技术国家重点实验室 \hfill 硕士
+		
+		\item[2010.9～2014.6] 常州大学计算机科学与技术 \hfill 本科
+		
+	\end{description}
+	
+	% 发表文章目录
+	\vspace{5ex}
+	\begin{Publications}{2}
+		
+		\item \textbf{\underline{Yiyang Zhou}}, Wenhai Wang, Wenjie Guan, Yirui Wu, Heng Lai, Tong Lu, Min Cai. Visual Robotic Object Grasping Through Combining RGB-D Data and 3D Meshes. The 23rd International Conference on MultiMedia Modeling (MMM'17), Reykjavik, Iceland, accepted for Oral Presentation, pp. 404-415, 2017 (CCF C 类会议)
+		
+		\item 路通，\textbf{\underline{周逸徉}}，蔡敏， “基于点云配准的物体抓取区域定位方法”， 国家专利， 申请号： 201610998429.3， 2016
+		
+		\item 南京大学优秀研究生，2016
+		
+	\end{Publications}
+	
+	\vspace{4ex}
+	\noindent {\heiti 攻读硕士学位期间参与的课题}
+	
+	\begin{enumerate}[label=\arabic*., labelindent=0em, leftmargin=*]
+		
+		\item 基于视觉语义推理与上下文约束建模的场景理解方法研究，国家自然科学基金（2013至2016，批准号61272218）
+		
+		%\item 面向Internet的软件方法与技术研究，国家自然科学基金（2014至2016，批准号61321491）
+		
+		\item 实时场景感知与理解方法研究，江苏省杰出青年科学基金（2016至2019，批准号BK20160021）
+		
+		\item 融合先验建模和深度学习的自然场景视觉理解研究, 国家自然科学基金（2017至2020，批准号61672273）
+		
+	\end{enumerate}
+	
+	% 致谢
+	\begin{thanks}
+		\vskip 18pt
+		
+		书至末尾，油然感慨。回顾硕士生涯的三年时光，不免唏嘘。
+		
+		 首先我要感谢我的研究生导师路通教授。在路老师的指导下，我逐渐打开了计算机科学的大门，在计算机科学的道路上前进。路老师以他严谨的治学态度、广博的领域学识和丰富的研究经验都令我受益匪浅。此外，路老师又提供给我出门实践与交流的机会，让我开阔眼界，扩展知识面。在路老师影响下，我逐渐掌握了正确的做科学研究的方法，这也使得我在研究生阶段的学习和研究变得事半功倍。我在科研上取得的成果，学术论文的发表都与路老师的悉心指导密不可分。在此，向路老师表示深深的敬意。
+		
+		英特尔中国研究院院长宋继强博士在我研究院交流期间也给予的悉心指导；苏丰老师在我出国开会之际不厌其烦地叮嘱我各类事项。这都使我受益颇多，在此我也表示感谢。
+		
+		 感谢课题组已经毕业的巫义锐博士、吴亮、许佳敏、张宇、翁炀冰等师兄，是你们在我刚进组时为我解答科研上所遇到的问题；感谢课题组袁泽寰博士、王文海、管文杰、王振、孙鑫、侯文博、胡天萍、周先礼、魏良雷等同学，是你们营造了实验室里浓厚的科研氛围，从你们身上我都学到了很多东西，感谢你们在我研究生三年中给予的关心和帮助，实验室因你们而更精彩。感谢我的室友朱君、朱浩仁以及周旺，在我成长道路上给予的关心与帮助，让我感受到了和谐与融洽，博爱与包容。感谢南京大学提供了良好的生活环境和研究条件，感谢学校对我的培养，这三年时光将会是我人生中宝贵的财富。
+		
+		最后，我要感谢我的父母创造了和谐宽容的家庭氛围，同时在生活上给予无微不至的关怀并全力支持我的理想，让我在成长的道路上迈步更加坚定。在此，我想对二老说一句，“爸爸妈妈，辛苦了！”。
+		
+		离开学校不免有点感伤，硕士三年的经历对我来说是宝贵的财富，让我遇事不慌、做事不乱，能够更有信心去面对未来，去迎接挑战。
+		\newline
+		\newline
+		\rightline{周逸徉}
+		\rightline{2017年5月于南大仙林}
+		
+	\end{thanks}
+	% 学位声明页需要加入，需要改makelicense命令
+	%\makelicense
+
+\end{document}
